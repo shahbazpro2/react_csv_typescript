@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Menu } from 'antd';
-import {withRouter,useParams} from 'react-router-dom'
+import { Layout, Menu, Tabs } from 'antd';
+import { withRouter, useParams } from 'react-router-dom'
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     UserOutlined,
     UploadOutlined,
-    RollbackOutlined
+    RollbackOutlined,
+    TableOutlined,
+    SettingOutlined
 } from '@ant-design/icons'
 import ListUsers from './ListUsers';
 import { useSelector } from 'react-redux';
-
+import Settings from './Settings';
+const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
-const SingleUser = ({history}) => {
-    const user =useSelector(state=>state.user.user)
+const SingleUser = ({ history }) => {
+    const user = useSelector(state => state.user.user)
     const [collapsed, setCollapsed] = useState(false);
     const [active, setActive] = useState('2');
     const [email, setEmail] = useState('');
-    let {id}=useParams()
+    let { id, rid } = useParams()
     useEffect(() => {
-       setEmail(user.email)
+        setEmail(user.email)
     }, [])
     const toggle = () => {
         setCollapsed(!collapsed)
@@ -31,8 +34,31 @@ const SingleUser = ({history}) => {
         if (active === '1') {
             history.push('/')
         } else if (active === '2') {
-            return <ListUsers id={id} user={user} single={true} />
-        } 
+            return <Tabs defaultActiveKey="1">
+                <TabPane
+                    tab={
+                        <span>
+                            <TableOutlined />
+              CSV Data
+            </span>
+                    }
+                    key="1"
+                >
+                    <ListUsers id={id} user={user} single={true} />
+                </TabPane>
+                <TabPane
+                    tab={
+                        <span>
+                            <SettingOutlined />
+              Settings
+            </span>
+                    }
+                    key="2"
+                >
+                    <Settings id={rid} />
+                </TabPane>
+            </Tabs>
+        }
         else if (active === '3') {
             localStorage.removeItem('email');
             window.location.replace('/login')

@@ -110,7 +110,7 @@ class TableColumn extends React.Component {
             key: 'DealerID',
             ...this.getColumnSearchProps('DealerID'),
             sorter: (a, b) => a.DealerID - b.DealerID,
-            render: text => this.state.type === 'admin' ? <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle(text)}>{text}</div> : text
+        render: text => this.state.type === 'admin' ? <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle(text)}>{text}</div> : text
         },
         {
             title: 'Dealer Name',

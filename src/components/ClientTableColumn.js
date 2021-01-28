@@ -80,8 +80,8 @@ class ClientTableColumn extends React.Component {
         clearFilters();
         this.setState({ searchText: '' });
     };
-    openSingle = (val) => {
-        this.props.history.push(`/client/${val}`)
+    openSingle = (val,id) => {
+        this.props.history.push(`/client/${id}/${val}`)
     }
     columns = [
         
@@ -91,7 +91,7 @@ class ClientTableColumn extends React.Component {
             key: 'DealerID',
             ...this.getColumnSearchProps('DealerID'),
             sorter: (a, b) => a.DealerID - b.DealerID,
-            render: text => <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle("8970")}>{text}</div> 
+            render: text => <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle("8970",text)}>{text}</div> 
         },
         {
             title: 'Dealer Name',

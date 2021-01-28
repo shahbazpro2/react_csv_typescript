@@ -4,6 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios'
 import { userPreferences } from '../configurations/urls';
+import { getAdminUserPreferences } from './../configurations/urls';
 const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -14,7 +15,7 @@ const validateMessages = {
         range: '${label} must be between ${min} and ${max}',
     },
 };
-const Settings = ({active}) => {
+const Settings = ({active,id}) => {
     const user = useSelector(state => state.user.user)
     const [newfile, setNewfile] = useState('')
     const [oldfile, setOldFile] = useState('')
@@ -22,7 +23,17 @@ const Settings = ({active}) => {
     const [error,setError]=useState(null)
     const [form] = Form.useForm();
     useEffect(()=>{
-        
+        if(id){
+            axios.get(`${getAdminUserPreferences}${id}`)
+            .then(res=>{
+                let data={...res.data,...res.data.user_preferences}
+                console.log('d',data)
+                data.new_enhance_all=true
+                data.used_enhance_all=true
+                form.setFieldsValue({user:data})
+            })
+            .catch(err=>console.log(err))
+        }else{
         axios.get(userPreferences)
         .then(res=>{
             let data={...user,...res.data}
@@ -32,9 +43,9 @@ const Settings = ({active}) => {
             form.setFieldsValue({user:data})
         })
         .catch(err=>console.log(err))
+    }
         
-        
-    },[active])
+    },[active,id])
     
     const onFinish = (values) => {
         console.log(values.user);
