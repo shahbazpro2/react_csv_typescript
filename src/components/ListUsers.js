@@ -4,7 +4,7 @@ import { tbData } from './sample';
 import axios from 'axios'
 import ClientTableColumn from './ClientTableColumn';
 import { useSelector, useDispatch } from 'react-redux';
-import { allUsersData } from '../configurations/urls';
+import { allUsersData, singleProcessedData } from '../configurations/urls';
 import { setAllUsers } from './../redux/actions/index';
 
 
@@ -13,9 +13,15 @@ const ListUsers = ({ id,user,single }) => {
     const dispatch = useDispatch()
     const [data, setData] = useState(allUsers)
     useEffect(() => {
-        console.log('user',user)
+        
         if (user.is_admin === false||single===true) {
-            setData(tbData)
+            axios.get(`${singleProcessedData}${user.dealer_id}`)
+            .then(res => {
+                console.log('data',res.data)
+                setData(res.data)
+            }).catch(err => {
+                console.log(err)
+            })
         } else {
             axios.get(allUsersData)
                 .then(res => {
@@ -28,11 +34,23 @@ const ListUsers = ({ id,user,single }) => {
 
     }, [])
 
-
-    const dataSource = data.length > 0 && data.map((d, i) => (d))
+const dataSource=()=>{
+    let arr=[]
+    data.length > 0 && data.forEach((d, i) => {
+        if(d.images){
+            d.images.forEach(img=>{
+                arr.push({...d,'images':'','processed_image':`http://3.138.211.235:8001/media/${img.processed_image}`,'original_image':`http://3.138.211.235:8001/media/${img.original_image}`})
+            })
+        }else{
+            arr.push(d)
+        }
+    })
+    return arr
+}
+     
     return (
         <>
-            {id ? <TableColumn dataSource={dataSource.length > 0 && dataSource.filter(t => t.DealerID === id)} /> : <ClientTableColumn dataSource={dataSource} />}
+            <TableColumn dataSource={dataSource()} />
         </>
     )
 }

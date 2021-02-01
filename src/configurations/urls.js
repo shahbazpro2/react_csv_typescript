@@ -1,7 +1,7 @@
 // Base URLS
 
 // Localhost
-export const baseURL = "http://vehicle-inventory-ai.herokuapp.com/";
+export const baseURL = "http://3.138.211.235:8001/";
 
 
 export const userCreateEndPoint = baseURL + "auth/users/"
@@ -16,3 +16,4 @@ export const refreshToken=baseURL+"auth/jwt/refresh/"
 export const createNewPassword=baseURL+"auth/users/reset_password_confirm/"
 export const allUsersData=baseURL+"fr/admin/users/"
 export const getAdminUserPreferences=baseURL+"fr/admin/users/"
+export const singleProcessedData=baseURL+"processed/images/"

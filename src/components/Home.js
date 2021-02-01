@@ -29,17 +29,18 @@ const Home = (props) => {
     const [active, setActive] = useState(null);
     const { pathname } = useLocation();
     useEffect(() => {
-        if (pathname === '/clients') {
+        /* if (pathname === '/clients') {
             setActive('1')
-        } else if (pathname === '/inventory-list') {
-            setActive('2')
+        } else */ 
+        if (pathname === '/inventory-list') {
+            setActive('1')
         } else if (pathname === '/summary') {
-            setActive('3')
+            setActive('2')
         }
         else if (pathname === '/cutout') {
-            setActive('4')
+            setActive('3')
         } else {
-            props.history.push('/clients')
+            props.history.push('/inventory-list')
         }
     }, [pathname])
 
@@ -52,53 +53,35 @@ const Home = (props) => {
         setCollapsed(!collapsed)
     };
     const changeLink = (e) => {
-        if (e.key === '1') {
+        /* if (e.key === '1') {
             props.history.push('/clients')
-        } else if (e.key === '2') {
+        } else */ 
+        if (e.key === '1') {
             props.history.push('/inventory-list')
-        } else if (e.key === '3') {
+        } else if (e.key === '2') {
             props.history.push('/summary')
-        } else if (e.key === '4') {
+        } else if (e.key === '3') {
             props.history.push('/cutout')
-        } else if (e.key === '5') {
+        } else if (e.key === '4') {
             dispatch(logoutUser())
             window.location.replace('/login')
         }
     }
     const showContent = () => {
-        if (active === '1') {
+        /* if (active === '1') {
 
             return <ListUsers user={user} />
-        } else if (active === '2') {
+        } else  */
+        if (active === '1') {
 
-            return <Tabs defaultActiveKey="1">
-                <TabPane
-                    tab={
-                        <span>
-                            <TabletOutlined />
-              CSV Data
-            </span>
-                    }
-                    key="1"
-                >
-                    <ShowingCsv />
-                </TabPane>
-                {/* <TabPane
-                    tab={
-                        <span>
-                            <SettingOutlined />
-              Settings
-            </span>
-                    }
-                    key="2"
-                >
-                    <Settings />
-                </TabPane> */}
-            </Tabs>
-        } else if (active === '3') {
+            return  <ShowingCsv />
+                
+                
+            
+        } else if (active === '2') {
             return <Summary />
         }
-        else if (active === '4') {
+        else if (active === '3') {
             return <ManualCutout />
         }
     }
@@ -111,19 +94,19 @@ const Home = (props) => {
                             {!collapsed && <small className="text-white mb-0">{user.email}</small>}
                         </div>
                         <Menu theme="dark" mode="inline" onClick={changeLink} defaultSelectedKeys={active}>
-                            <Menu.Item key="1" icon={<TeamOutlined />}>
+                           {/*  <Menu.Item key="1" icon={<TeamOutlined />}>
                                 Clients
-            </Menu.Item>
-                            <Menu.Item key="2" icon={<UnorderedListOutlined />}>
+            </Menu.Item> */}
+                            <Menu.Item key="1" icon={<UnorderedListOutlined />}>
                                 Inventory Lists
             </Menu.Item>
-                            <Menu.Item key="3" icon={<FundViewOutlined />}>
+                            <Menu.Item key="2" icon={<FundViewOutlined />}>
                                 View Summary
             </Menu.Item>
-                            <Menu.Item key="4" icon={<ScissorOutlined />}>
+                            <Menu.Item key="3" icon={<ScissorOutlined />}>
                                 Manual Cutout
             </Menu.Item>
-                            <Menu.Item key="5" icon={<UploadOutlined />}>
+                            <Menu.Item key="4" icon={<UploadOutlined />}>
                                 Logout
             </Menu.Item>
                         </Menu>

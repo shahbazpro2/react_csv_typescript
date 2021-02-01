@@ -65,7 +65,7 @@ const PublicUser = ({ history }) => {
     }
     const showContent = () => {
         if (active === '1') {
-            return <ListUsers id="8970" user={user.user} />
+            return <ListUsers  user={user.user} />
         } else if (active === '2') {
             return <Summary />
         }
@@ -81,7 +81,15 @@ const PublicUser = ({ history }) => {
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed}>
                 <div className="logo">
-                    {!collapsed && <small className="text-white mb-0">{email}</small>}
+                    {!collapsed &&<div>
+                            <div>
+                            <small className="text-white mb-0">{user.user.dealer_name}</small>
+                            </div>
+                        <div>
+                        <small className="text-white mb-0">{user.user.dealer_id}</small>
+                        </div>
+                        
+                    </div> }
                 </div>
                 <Menu theme="dark" mode="inline" onClick={changeLink} defaultSelectedKeys={['1']}>
                     <Menu.Item key="1" icon={<UserOutlined />}>

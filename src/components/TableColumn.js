@@ -88,7 +88,7 @@ class TableColumn extends React.Component {
     columns = [
         {
             title: 'Orignal Image',
-            dataIndex: 'Original',
+            dataIndex: 'original_image',
             key: 'Original',
             render: img =>  <Image
             width={80}
@@ -97,7 +97,7 @@ class TableColumn extends React.Component {
         },
         {
             title: 'Removed Image',
-            dataIndex: 'BackgroundRemoved',
+            dataIndex: 'processed_image',
             key: 'BackgroundRemoved',
             render: img => <Image
             width={80}
@@ -106,7 +106,7 @@ class TableColumn extends React.Component {
         },
         {
             title: 'Dealer ID',
-            dataIndex: 'DealerID',
+            dataIndex: 'dealer_id',
             key: 'DealerID',
             ...this.getColumnSearchProps('DealerID'),
             sorter: (a, b) => a.DealerID - b.DealerID,
@@ -114,40 +114,40 @@ class TableColumn extends React.Component {
         },
         {
             title: 'Dealer Name',
-            dataIndex: 'DealerName',
+            dataIndex: 'Dealer_name',
             key: 'DealerName',
             ...this.getColumnSearchProps('DealerName'),
             sorter: (a, b) => a.DealerName - b.DealerName
         },
         {
             title: 'VIN',
-            dataIndex: 'VIN',
+            dataIndex: 'vin',
             key: 'VIN',
             ...this.getColumnSearchProps('VIN'),
             sorter: (a, b) => a.VIN - b.VIN
         },
         {
             title: 'Stock Number',
-            dataIndex: 'StockNumber',
+            dataIndex: 'stock_number',
             key: 'StockNumber',
             ...this.getColumnSearchProps('StockNumber'),
             sorter: (a, b) => a.StockNumber - b.StockNumber
         },
         {
             title: 'Year',
-            dataIndex: 'Year',
+            dataIndex: 'year',
             key: 'Year',
             ...this.getColumnSearchProps('Year'),
             sorter: (a, b) => a.Year - b.Year
         },
         {
             title: 'Make',
-            dataIndex: 'Make',
+            dataIndex: 'make',
             key: 'Make',
         },
         {
             title: 'Model',
-            dataIndex: 'Model',
+            dataIndex: 'model',
             key: 'Model',
             ...this.getColumnSearchProps('Model'),
         },
@@ -158,35 +158,36 @@ class TableColumn extends React.Component {
         },
         {
             title: 'Vehicle Type',
-            dataIndex: 'VehicleType',
+            dataIndex: 'vehicle_type',
             key: 'VehicleType',
             ...this.getColumnSearchProps('VehicleType'),
         },
         {
             title: 'Certified',
-            dataIndex: 'Certified',
+            dataIndex: 'certified',
             key: 'Certified',
+            render: (a) => <div > {a===true?'true':'false'} </div>
         },
         {
             title: 'Vehicle Age',
-            dataIndex: 'VehicleAge',
+            dataIndex: 'vehicle_age',
             key: 'VehicleAge',
             ...this.getColumnSearchProps('VehicleAge'),
             sorter: (a, b) => a.VehicleAge - b.VehicleAge
         },
         {
             title: 'Image Modified',
-            dataIndex: 'ImageModified',
+            dataIndex: 'Image_modified',
             key: 'ImageModified',
         },
         {
             title: 'Lot Location',
-            dataIndex: 'LotLocation',
+            dataIndex: 'lot_location',
             key: 'LotLocation',
         },
         {
             title: 'Address',
-            dataIndex: 'Address',
+            dataIndex: 'address',
             key: 'Address',
         },
          {
@@ -196,7 +197,7 @@ class TableColumn extends React.Component {
             fixed: 'right',
             width: 100,
             render: (a) => <div style={{ cursor: 'pointer' }} onClick={() => {
-                this.setState({ isModalVisible: true, originalImage: a.Original, removedImage: a.BackgroundRemoved }); this.props.sendToEditor({ orignalImage: a.Original, removedImage: a.BackgroundRemoved, link: this.props.location.pathname }); this.props.history.push('/editor')
+                this.setState({ isModalVisible: true, originalImage: a.original_image, removedImage: a.processed_image }); this.props.sendToEditor({ orignalImage: a.original_image, removedImage: a.processed_image, link: this.props.location.pathname }); this.props.history.push('/editor')
             }}>
                 <EditOutlined />
             </div>

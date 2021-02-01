@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import TableColumn from './TableColumn';
+import { getUserData } from './../configurations/urls';
 
 const ShowingCsv = () => {
     const [data, setData] = useState([])
     useEffect(() => {
-        axios.get('http://3.138.211.235:8000/bgremove/result/')
+        axios.get(getUserData)
             .then(res => {
-
+                console.log('data',res.data)
                 setData(res.data)
             })
             .catch(err => {

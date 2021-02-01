@@ -22,6 +22,7 @@ const Register = (props) => {
     const [newfile, setNewfile] = useState('')
     const [oldfile, setOldFile] = useState('')
     const [success, setSuccess] = useState(null)
+    const [error, setError] = useState(null)
     const dispatch = useDispatch()
     const onFinish = (values) => {
         console.log(values.user);
@@ -45,11 +46,14 @@ const Register = (props) => {
                         localStorage.setItem('type', 'public')
                         props.history.push('/')
                     }).catch(err=>{
+                        props.history.push('/')
                         console.log(err)
                     })
                
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                setError(true)
+                console.log(err)})
     };
     const customRequestFun = (options) => {
         const { onSuccess, file } = options;
@@ -116,6 +120,9 @@ const Register = (props) => {
                                         Save Info
                                 </Button>
                                 </Form.Item>
+                                {error && <p className="text-danger">
+                                    There is something wrong
+                                    </p>}
                                 {success && <p className="text-success">
                                     Information Successfully Submitted
                                     </p>}

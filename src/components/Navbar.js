@@ -1,8 +1,15 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../logo.png'
+import { useSelector,useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/actions';
 
-const Navbar = ({ user }) => {
+const Navbar = () => {
+    const user=useSelector(state=>state.user.user)
+    const dispatch=useDispatch()
+    const clearStorage=()=>{
+        dispatch(logoutUser())
+        window.location.replace('/login')
+    }
     return (
         <nav className="navbar navbar-expand-lg navbar-dark">
             <div className="container">
@@ -12,14 +19,21 @@ const Navbar = ({ user }) => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                        {console.log('user',user)}
+                        {
+                        user?.email?<li className="nav-item" onClick={clearStorage}>
+                            <Link className="nav-link">Logout</Link>
+                        </li>:
+                        <>
                         <li className="nav-item">
                             <Link className="nav-link" to="/login">Login</Link>
                         </li>
-                        {user !== 'admin' &&
+                        
                             <li className="nav-item">
                                 <Link className="nav-link" to="/register">Register</Link>
                             </li>
-                        }
+                            </>
+}
                     </ul>
                 </div>
             </div>

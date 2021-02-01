@@ -38,7 +38,7 @@ const Login = ({ user, history }) => {
                     axios.get(getUserData)
                         .then(res => {
                             dispatch(setCurrentUser(res.data))
-                            history.push('/public')
+                            history.push('/')
                         }).catch(err => {
                             console.log(err)
                         })
