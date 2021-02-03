@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import TableColumn from './TableColumn';
-import { tbData } from './sample';
 import axios from 'axios'
-import ClientTableColumn from './ClientTableColumn';
-import { useSelector, useDispatch } from 'react-redux';
-import { allUsersData, singleProcessedData } from '../configurations/urls';
-import { setAllUsers } from './../redux/actions/index';
+import { singleProcessedData } from '../configurations/urls';
 
 
-const ListUsers = ({ id,user,single }) => {
-    const allUsers = useSelector(state => state.user.allUsersData)
-    const dispatch = useDispatch()
-    const [data, setData] = useState(allUsers)
+const ListUsers = ({ user,single,id }) => {
+    const [data, setData] = useState([])
     useEffect(() => {
         
         if (user.is_admin === false||single===true) {
@@ -23,9 +17,8 @@ const ListUsers = ({ id,user,single }) => {
                 console.log(err)
             })
         } else {
-            axios.get(allUsersData)
+            axios.get(`${singleProcessedData}${id}`)
                 .then(res => {
-                    dispatch(setAllUsers(res.data))
                     setData(res.data)
                 }).catch(err => {
                     console.log(err)

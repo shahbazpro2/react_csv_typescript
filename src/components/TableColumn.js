@@ -11,7 +11,6 @@ class TableColumn extends React.Component {
     state = {
         searchText: '',
         searchedColumn: '',
-        type: localStorage.getItem('type'),
         isModalVisible: false,
         visible: false,
         index: 0,
@@ -110,7 +109,7 @@ class TableColumn extends React.Component {
             key: 'DealerID',
             ...this.getColumnSearchProps('DealerID'),
             sorter: (a, b) => a.DealerID - b.DealerID,
-        render: text => this.state.type === 'admin' ? <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle(text)}>{text}</div> : text
+        render: text => this.props.user && this.props.user.user.is_admin ? <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle(text)}>{text}</div> : text
         },
         {
             title: 'Dealer Name',
@@ -213,17 +212,12 @@ class TableColumn extends React.Component {
         console.log('c')
         this.setState(prevState => ({ visible: !prevState.visible }))}
     render() {
-        const { visible, source } = this.state;
         return (
             <div>
 
                 {/* <Editor original={this.state.originalImage} removed={this.state.removedImage} /> */}
-                <TableComp columns={this.columns} dataSource={this.props.dataSource} />
-               
-                   
-                
-
-
+                <TableComp columns={this.columns} dataSource={this.props.dataSource} loading={this.props.loading} />
+       
             </div>
         )
     }

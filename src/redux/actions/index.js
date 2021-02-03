@@ -20,3 +20,9 @@ export const setAllUsers = (users) => {
         payload:users
     };
 }
+export const setAllProcessedCsv = (data) => {
+    return {
+        type: actionTypes.ALL_PROCESSED_CSV,
+        payload:data
+    };
+}

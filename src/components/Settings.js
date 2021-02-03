@@ -167,12 +167,12 @@ const Settings = ({ active, id }) => {
                                 <Form.Item name={['user', 'new_only_enhance_min_num']} label="Only enhance if vehicle has a minimun of" >
                                     <InputNumber />
                                 </Form.Item>
-                                <Form.Item name={['user', 'new_enhance_all']} valuePropName="checked" label="Enhance all existing inventory">
+                             {/* <Form.Item name={['user', 'new_enhance_all']} valuePropName="checked" label="Enhance all existing inventory">
                                     <Checkbox></Checkbox>
-                                </Form.Item>
-                                <Form.Item name={['user', 'new_enhance_after']} label="Enhance inventory only after">
+                                </Form.Item> */}
+                                {/* <Form.Item name={['user', 'new_enhance_after']} label="Enhance inventory only after">
                                     <Input type="date" format={'YYYY-MM-DD'} />
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item label="Upload background image">
                                     <div className="d-flex">
                                     <Upload customRequest={customRequestFun}>
@@ -195,12 +195,12 @@ const Settings = ({ active, id }) => {
                                 <Form.Item name={['user', 'used_only_enhance_min_num']} label="Only enhance if vehicle has a minimun of" >
                                     <InputNumber />
                                 </Form.Item>
-                                <Form.Item name={['user', 'used_enhance_all']} valuePropName="checked" label="Enhance all existing inventory">
+                                {/* <Form.Item name={['user', 'used_enhance_all']} valuePropName="checked" label="Enhance all existing inventory">
                                     <Input type="checkbox" />
-                                </Form.Item>
-                                <Form.Item name={['user', 'used_enhance_after']} label="Enhance inventory only after">
+                                </Form.Item> */}
+                                {/* <Form.Item name={['user', 'used_enhance_after']} label="Enhance inventory only after">
                                     <Input type="date" format={'YYYY-MM-DD'} />
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item label="Upload background image">
                                     <div className="d-flex">
                                     <Upload customRequest={customRequestFun1}>

@@ -25,7 +25,6 @@ const PublicUser = ({ history }) => {
     const dispatch = useDispatch()
     const [collapsed, setCollapsed] = useState(false);
     const [active, setActive] = useState('1');
-    const [email, setEmail] = useState('');
 
     useEffect(() => {
         console.log('check token')
@@ -55,7 +54,6 @@ const PublicUser = ({ history }) => {
         if(user.user.is_admin===true){
             history.push('/')
         }
-        setEmail(user.user.email)
     }, [])
     const toggle = () => {
         setCollapsed(!collapsed)
