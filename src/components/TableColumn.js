@@ -88,7 +88,7 @@ class TableColumn extends React.Component {
         {
             title: 'Orignal Image',
             dataIndex: 'original_image',
-            key: 'Original',
+            key: 'original_image',
             render: img =>  <Image
             width={80}
             src={img}
@@ -96,8 +96,8 @@ class TableColumn extends React.Component {
         },
         {
             title: 'Removed Image',
-            dataIndex: 'processed_image',
-            key: 'BackgroundRemoved',
+            dataIndex: 'editted_image',
+            key: 'editted_image',
             render: img => <Image
             width={80}
             src={img}
@@ -105,89 +105,89 @@ class TableColumn extends React.Component {
         },
         {
             title: 'Dealer ID',
-            dataIndex: 'dealer_id',
-            key: 'DealerID',
-            ...this.getColumnSearchProps('DealerID'),
-            sorter: (a, b) => a.DealerID - b.DealerID,
-        render: text => this.props.user && this.props.user.user.is_admin ? <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle(text)}>{text}</div> : text
+            dataIndex: 'owner',
+            key: 'owner',
+            ...this.getColumnSearchProps('owner'),
+            
+            render: text => this.props.user && this.props.user.user.is_admin ? <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle(text)}>{text}</div> : text
         },
         {
             title: 'Dealer Name',
-            dataIndex: 'Dealer_name',
-            key: 'DealerName',
-            ...this.getColumnSearchProps('DealerName'),
+            dataIndex: 'dealer_name',
+            key: 'dealer_name',
+            ...this.getColumnSearchProps('dealer_name'),
             sorter: (a, b) => a.DealerName - b.DealerName
         },
         {
             title: 'VIN',
             dataIndex: 'vin',
-            key: 'VIN',
-            ...this.getColumnSearchProps('VIN'),
+            key: 'vin',
+            ...this.getColumnSearchProps('vin'),
             sorter: (a, b) => a.VIN - b.VIN
         },
         {
             title: 'Stock Number',
             dataIndex: 'stock_number',
-            key: 'StockNumber',
-            ...this.getColumnSearchProps('StockNumber'),
-            sorter: (a, b) => a.StockNumber - b.StockNumber
+            key: 'stock_number',
+            ...this.getColumnSearchProps('stock_number'),
+            sorter: (a, b) => a.stock_number - b.stock_number
         },
         {
             title: 'Year',
             dataIndex: 'year',
-            key: 'Year',
-            ...this.getColumnSearchProps('Year'),
-            sorter: (a, b) => a.Year - b.Year
+            key: 'year',
+            ...this.getColumnSearchProps('year'),
+            sorter: (a, b) => a.year - b.year
         },
         {
             title: 'Make',
             dataIndex: 'make',
-            key: 'Make',
+            key: 'make',
         },
         {
             title: 'Model',
             dataIndex: 'model',
-            key: 'Model',
-            ...this.getColumnSearchProps('Model'),
+            key: 'model',
+            ...this.getColumnSearchProps('model'),
         },
         {
             title: 'Trim',
-            dataIndex: 'Trim',
-            key: 'Trim',
+            dataIndex: 'trim',
+            key: 'trim',
         },
         {
             title: 'Vehicle Type',
             dataIndex: 'vehicle_type',
-            key: 'VehicleType',
-            ...this.getColumnSearchProps('VehicleType'),
+            key: 'vehicle_type',
+            ...this.getColumnSearchProps('vehicle_type'),
         },
         {
             title: 'Certified',
             dataIndex: 'certified',
-            key: 'Certified',
+            key: 'certified',
             render: (a) => <div > {a===true?'true':'false'} </div>
         },
         {
             title: 'Vehicle Age',
             dataIndex: 'vehicle_age',
-            key: 'VehicleAge',
-            ...this.getColumnSearchProps('VehicleAge'),
-            sorter: (a, b) => a.VehicleAge - b.VehicleAge
+            key: 'vehicle_age',
+            ...this.getColumnSearchProps('vehicle_age'),
+            sorter: (a, b) => a.vehicle_age - b.vehicle_age
         },
         {
             title: 'Image Modified',
-            dataIndex: 'Image_modified',
-            key: 'ImageModified',
+            dataIndex: 'image_modified',
+            key: 'image_modified',
         },
         {
             title: 'Lot Location',
             dataIndex: 'lot_location',
-            key: 'LotLocation',
+            key: 'lot_location',
         },
         {
             title: 'Address',
             dataIndex: 'address',
-            key: 'Address',
+            key: 'address',
         },
          {
 
@@ -196,7 +196,8 @@ class TableColumn extends React.Component {
             fixed: 'right',
             width: 100,
             render: (a) => <div style={{ cursor: 'pointer' }} onClick={() => {
-                this.setState({ isModalVisible: true, originalImage: a.original_image, removedImage: a.processed_image }); this.props.sendToEditor({ orignalImage: a.original_image, removedImage: a.processed_image, link: this.props.location.pathname }); this.props.history.push('/editor')
+                console.log('a',a)
+                this.setState({ isModalVisible: true, originalImage: a.original_image, removedImage: a.processed_image }); this.props.sendToEditor({ orignalImage: a.original_image, removedImage: a.processed_image, link: this.props.location.pathname,imgName:a.processed_image.split("/")[8],dealerId:a.owner }); this.props.history.push('/editor')
             }}>
                 <EditOutlined />
             </div>

@@ -3,6 +3,8 @@ export const SET_CURRENT_USER = 'SET_CURRENT_USER'
 export interface toAction {
     orignalImage: string,
     removedImage: string,
+    imgName:string,
+    dealerId:string,
     link:string
 }
 

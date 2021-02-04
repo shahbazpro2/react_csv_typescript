@@ -20,7 +20,7 @@ const SingleUser = ({ history }) => {
     const [collapsed, setCollapsed] = useState(false);
     const [active, setActive] = useState('2');
     const [email, setEmail] = useState('');
-    let { id, rid } = useParams()
+    let { id } = useParams()
     useEffect(() => {
         setEmail(user.email)
     }, [])
@@ -44,7 +44,7 @@ const SingleUser = ({ history }) => {
                     }
                     key="1"
                 >
-                    <ListUsers id={id} user={user} single={true} />
+                    <ListUsers id={id} user={user} />
                 </TabPane>
                 <TabPane
                     tab={
@@ -55,7 +55,7 @@ const SingleUser = ({ history }) => {
                     }
                     key="2"
                 >
-                    <Settings id={rid} />
+                    <Settings id={id} />
                 </TabPane>
             </Tabs>
         }

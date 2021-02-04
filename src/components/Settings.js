@@ -30,7 +30,9 @@ const Settings = ({ active, id }) => {
                     data.new_enhance_all = true
                     data.used_enhance_all = true
                     form.setFieldsValue({ user: data })
-                    setPreview({newfile:data.new_background_image,oldfile:data.used_background_image})
+                    setPreview({newfile:`
+                    ${data.new_background_image}`,oldfile:`
+                    ${data.used_background_image}`})
                 })
                 .catch(err => console.log(err))
         } else {
@@ -41,7 +43,9 @@ const Settings = ({ active, id }) => {
                     data.new_enhance_all = true
                     data.used_enhance_all = true
                     form.setFieldsValue({ user: data })
-                    setPreview({newfile:data.new_background_image,oldfile:data.used_background_image})
+                    setPreview({newfile:`
+                    ${data.new_background_image}`,oldfile:`
+                    ${data.used_background_image}`})
                 })
                 .catch(err => console.log(err))
         }

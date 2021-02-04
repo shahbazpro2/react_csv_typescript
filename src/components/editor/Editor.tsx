@@ -8,7 +8,8 @@ import colors from '../../colors.png'
 import { DrawPos, Orientation, ToolMode } from './types';
 import { useSelector } from 'react-redux'
 import { editorState } from './../../Reducers/index';
-
+import {saveProcessedImage} from '../../configurations/urls.js'
+import axios from 'axios'
 
 interface Props {
     original: string,
@@ -46,7 +47,7 @@ export default function Editor(
     const transparentImage = React.useRef<HTMLImageElement>(null);
     const blurRef = React.useRef<HTMLButtonElement>(null)
     const cursorRef = React.useRef<HTMLDivElement>(null);
-
+    
     // Initialise tool states
     const [mode, setMode] = useState<ToolMode>(0);
 
@@ -140,98 +141,7 @@ export default function Editor(
 
             // Move the cursor, compensating for the size of the cursor image to ensure it is centered.
             cursorRef.current.innerHTML = cursor;
-           /*  if (brushSize === 3) {
-                if (zoom === 1.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 11}px`;
-                } else if (zoom === 2.0) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 10}px`;
-                } else if (zoom === 2.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 10}px`;
-                } else if (zoom === 3) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 8}px`;
-                } else if (zoom === 3.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 8}px`;
-                } else if (zoom === 4) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 8}px`;
-                } else if (zoom === 4.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 6}px`;
-                } else if (zoom === 5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 4}px`;
-                }
-
-            } else if (brushSize === 6) {
-                if (zoom === 1) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 10}px`;
-                } else if (zoom === 1.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 8}px`;
-                } else if (zoom === 2.0) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 7}px`;
-                } else if (zoom === 2.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 6}px`;
-                } else if (zoom === 3.0) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 4}px`;
-                } else if (zoom === 3.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 2}px`;
-                }else if (zoom === 4.0) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 1}px`;
-                }
-                else {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2))}px`;
-                }
-            } else if (brushSize === 9) {
-                if (zoom === 1) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 8}px`;
-                } else if (zoom === 1.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 8}px`;
-                } else if (zoom === 2.0) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 3}px`;
-                } else if (zoom === 2.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 2}px`;
-                }
-                else {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2))}px`;
-                }
-            }
-            else if (brushSize === 12) {
-                if (zoom === 1) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 6}px`;
-                } else if (zoom === 1.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 4}px`;
-                }
-                else {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2))}px`;
-                }
-            }
-            else if (brushSize === 15) {
-                if (zoom === 1) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 5}px`;
-                } else if (zoom === 1.5) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 2}px`;
-                }
-                else {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2))}px`;
-                }
-            } else if (brushSize === 18) {
-                if (zoom === 1) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 4}px`;
-                } else {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2))}px`;
-                }
-            } else if (brushSize === 21) {
-                if (zoom === 1) {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2)) - 2}px`;
-                } else {
-                    cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2))}px`;
-                }
-            }
-            else {
-                cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2))}px`;
-            }
-            cursorRef.current.style.left = `${event.pageX - (brushSize * zoom / 2) - 1}px`; */
-           /*  $(".cursor").show().css({
-                "left": event.clientX,
-                "top": event.clientY
-              }); */
+          
               cursorRef.current.style.top = `${event.pageY - (brushSize * (zoom / 2))}px`
               cursorRef.current.style.left = `${event.pageX - (brushSize * zoom / 2)}px`
         }
@@ -889,9 +799,13 @@ export default function Editor(
             if (backgroundIsTransparent) {
                 forceRedraw(true);
             }
-
+            axios.post(`${saveProcessedImage}${editor.editor.imgName}/${editor.editor.dealerId}/`,{image_data:canvasRef.current.toDataURL('image/png', 1.0).substring(22,canvasRef.current.toDataURL('image/png', 1.0).length)})
+            .then(res=>{
+                window.location.replace('/')
+            })
+            .catch(err=>console.log(err))
             // save it
-          /*   saveFun(canvasRef.current.toDataURL('image/png', 1.0), editor.editor.idx, { drawnPos, mode, color, image: readSaveImage, blur: imgBlur }) */
+             /* saveFun(canvasRef.current.toDataURL('image/png', 1.0), editor.editor.idx, { drawnPos, mode, color, image: readSaveImage, blur: imgBlur })  */
 
             // 'Clear' the background, i.e. put the transparent grid back.
             if (backgroundIsTransparent) {
@@ -1073,6 +987,9 @@ export default function Editor(
                             <div className="col-md-4 text-right pr-0">
                                 <button className="btn btn-primary" onClick={download}>Download</button>
                             </div>
+                           {editor.editor.link==='/cutout'?null: <div className="col-md-4 text-right ml-3">
+                                <button className="btn btn-primary" onClick={saveButton}>Save</button>
+                            </div>}
                         </div>
 
                     </div>

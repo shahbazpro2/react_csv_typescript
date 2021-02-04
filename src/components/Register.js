@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form, Input, InputNumber, Button, Upload, message } from 'antd';
+import { Form, Input, InputNumber, Button, Upload, message, Image } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import Navbar from './Navbar';
 import axios from 'axios'
@@ -19,8 +19,7 @@ const validateMessages = {
     },
 };
 const Register = (props) => {
-    const [newfile, setNewfile] = useState('')
-    const [oldfile, setOldFile] = useState('')
+    const [preview,setPreview]=useState({newfile:'',oldfile:''})
     const [success, setSuccess] = useState(null)
     const [error, setError] = useState(null)
     const dispatch = useDispatch()
@@ -32,8 +31,8 @@ const Register = (props) => {
             formData.append(key, value)
         }
         /* formData.append('hello','hy') */
-        formData.append('new_background_image', newfile)
-        formData.append('used_background_image', oldfile)
+        formData.append('new_background_image', preview.newfile)
+        formData.append('used_background_image', preview.oldfile)
         formData.append('new_enhance_all', true)
         formData.append('used_enhance_all', true)
         console.log(formData)
@@ -57,12 +56,24 @@ const Register = (props) => {
     };
     const customRequestFun = (options) => {
         const { onSuccess, file } = options;
-        setNewfile(file)
-        onSuccess(file)
+        let reader = new FileReader();
+
+        reader.readAsDataURL(file);
+      
+        reader.onload = function() {
+          setPreview({...preview,newfile:reader.result})
+        };
+              onSuccess(file)
     };
     const customRequestFun1 = (options) => {
         const { onSuccess, file } = options;
-        setOldFile(file)
+        let reader = new FileReader();
+
+        reader.readAsDataURL(file);
+      
+        reader.onload = function() {
+          setPreview({...preview,oldfile:reader.result})
+        };
         onSuccess(file)
     };
 
@@ -89,9 +100,18 @@ const Register = (props) => {
                                     <Input type="date" format={'YYYY-MM-DD'}  />
                                 </Form.Item>
                                 <Form.Item label="Upload background image">
+                                <div className="d-flex">
                                     <Upload customRequest={customRequestFun}>
                                         <Button icon={<UploadOutlined />}>Click to Upload</Button>
                                     </Upload>
+                                    <div className="ml-3">
+                                    <Image
+                                        width={80}
+                                        src={preview.newfile}
+                                    />
+                                    </div>
+                                    
+                                    </div>
                                 </Form.Item>
                                 <h6 className="pt-4">Used Vehicles</h6>
                                 <Form.Item name={['user', 'used_num_images']} label="Num images to enchance per vehicle">
@@ -107,9 +127,17 @@ const Register = (props) => {
                                     <Input type="date" format={'YYYY-MM-DD'} />
                                 </Form.Item>
                                 <Form.Item label="Upload background image">
+                                <div className="d-flex">
                                     <Upload customRequest={customRequestFun1}>
                                         <Button icon={<UploadOutlined />}>Click to Upload</Button>
                                     </Upload>
+                                    <div className="ml-3">
+                                    <Image
+                                        width={80}
+                                        src={preview.oldfile}
+                                    />
+                                    </div>
+                                    </div>
                                 </Form.Item>
                                 <h6 className="pt-4">Notes/Comments:</h6>
                                 <Form.Item name={['user', 'notes']} >

@@ -9,6 +9,8 @@ export interface editorState {
         editor: {
             orignalImage: string,
             removedImage: string,
+            imgName:string,
+            dealerId:string,
             link: string
         }
        
@@ -19,6 +21,8 @@ const initialEditor = {
     editor: {
         orignalImage: '',
         removedImage: '',
+        imgName:'',
+        dealerId:'',
         link: ''
     }
 }

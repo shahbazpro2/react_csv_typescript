@@ -34,7 +34,7 @@ if(user.allProcessedCsv.length>0){
     data.length > 0 && data.forEach((d, i) => {
         if(d.images){
             d.images.forEach(img=>{
-                arr.push({...d,'images':'','processed_image':`http://3.138.211.235:8001/${img.processed_image}`,'original_image':`http://3.138.211.235:8001/${img.original_image}`})
+                arr.push({...d,'images':'','editted_image':`http://3.138.211.235:8001/media/${img.editted_image}`,'original_image':`http://3.138.211.235:8001/media/${img.original_image}`,'processed_image':`http://3.138.211.235:8001/media/${img.processed_image}`})
             })
         }else{
             arr.push(d)

@@ -18,7 +18,7 @@ const validateMessages = {
 
 
 function RegisterMain() {
-    const [message, setMessage] = useState("There is something wrong")
+    const [message, setMessage] = useState('')
     const [showMessage, setshowMessage] = useState(false);
     const [email, setEmail] = useState('')
 
@@ -41,6 +41,7 @@ function RegisterMain() {
         const userData = {
             email: values.user["email"],
             dealer_name: values.user["dealerName"],
+            dealer_id: values.user["dealerId"],
             address: values.user["address"],
             phone: values.user["phone"],
             state: values.user["state"],
@@ -57,7 +58,15 @@ function RegisterMain() {
                     setEmail(userData['email'])
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log(err.response.data)
+                    if(err.response.data.dealer_id){
+                        setMessage(err.response.data.dealer_id[0]) 
+                    }else if(err.response.data.email){
+                        setMessage(err.response.data.email[0]) 
+                    }else{
+                        setMessage('There is something wrong') 
+                    }
+                    
                     setshowMessage(true);
                     
                 })
@@ -110,11 +119,10 @@ function RegisterMain() {
                                         </Form.Item>
                                     </div>
                                     <div className="col-md-6">
-                                        <Form.Item name={['user', 'address']} label="Address" {...inputConfig}>
+                                        <Form.Item name={['user', 'dealerId']} label="Dealer Id" {...inputConfig}>
                                             <Input />
                                         </Form.Item>
                                     </div>
-
 
                                 </div>
                                 <div className="row">
@@ -159,6 +167,11 @@ function RegisterMain() {
 
                                 </div>
                                 <div className="row">
+                                <div className="col-md-6">
+                                        <Form.Item name={['user', 'address']} label="Address" {...inputConfig}>
+                                            <Input />
+                                        </Form.Item>
+                                    </div>
                                     <div className="col-md-6">
                                         <Form.Item name={['user', 'website']} label="Website" {...inputConfig}>
                                             <Input />

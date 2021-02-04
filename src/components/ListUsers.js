@@ -4,11 +4,11 @@ import axios from 'axios'
 import { singleProcessedData } from '../configurations/urls';
 
 
-const ListUsers = ({ user,single,id }) => {
+const ListUsers = ({ user,id }) => {
     const [data, setData] = useState([])
     useEffect(() => {
-        
-        if (user.is_admin === false||single===true) {
+        console.log(id)
+        if (user.is_admin === false) {
             axios.get(`${singleProcessedData}${user.dealer_id}`)
             .then(res => {
                 console.log('data',res.data)
@@ -17,6 +17,7 @@ const ListUsers = ({ user,single,id }) => {
                 console.log(err)
             })
         } else {
+            console.log(id)
             axios.get(`${singleProcessedData}${id}`)
                 .then(res => {
                     setData(res.data)
@@ -32,7 +33,7 @@ const dataSource=()=>{
     data.length > 0 && data.forEach((d, i) => {
         if(d.images){
             d.images.forEach(img=>{
-                arr.push({...d,'images':'','processed_image':`http://3.138.211.235:8001/media/${img.processed_image}`,'original_image':`http://3.138.211.235:8001/media/${img.original_image}`})
+                arr.push({...d,'images':'','editted_image':`http://3.138.211.235:8001/media/${img.editted_image}`,'original_image':`http://3.138.211.235:8001/media/${img.original_image}`,'processed_image':`http://3.138.211.235:8001/media/${img.processed_image}`})
             })
         }else{
             arr.push(d)
