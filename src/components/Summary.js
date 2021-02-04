@@ -24,19 +24,19 @@ const Summary = () => {
                                 <div>New</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.lifetime.new}</h6>
+                                <h6>{data.lifetime && data.lifetime.new}</h6>
                             </div>
                             <div className="col-md-6">
                                 <div>Used</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.lifetime.used}</h6>
+                                <h6>{data.lifetime && data.lifetime.used}</h6>
                             </div>
                             <div className="col-md-6">
                                 <div>Total</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.lifetime.total}</h6>
+                                <h6>{data.lifetime && data.lifetime.total}</h6>
                             </div>
                         </div>
                     </Card>
@@ -48,19 +48,19 @@ const Summary = () => {
                                 <div>New</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_24_hours.new}</h6>
+                                <h6>{data.last_24_hours && data.last_24_hours.new}</h6>
                             </div>
                             <div className="col-md-6">
                                 <div>Used</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_24_hours.used}</h6>
+                                <h6>{data.last_24_hours && data.last_24_hours.used}</h6>
                             </div>
                             <div className="col-md-6">
                                 <div>Total</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_24_hours.total}</h6>
+                                <h6>{data.last_24_hours && data.last_24_hours.total}</h6>
                             </div>
                         </div>
                     </Card>
@@ -72,19 +72,19 @@ const Summary = () => {
                                 <div>New</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_7_days.new}</h6>
+                                <h6>{data.last_7_days && data.last_7_days.new}</h6>
                             </div>
                             <div className="col-md-6">
                                 <div>Used</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_7_days.used}</h6>
+                                <h6>{data.last_7_days && data.last_7_days.used}</h6>
                             </div>
                             <div className="col-md-6">
                                 <div>Total</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_7_days.total}</h6>
+                                <h6>{data.last_7_days && data.last_7_days.total}</h6>
                             </div>
                         </div>
                     </Card>
@@ -96,19 +96,19 @@ const Summary = () => {
                                 <div>New</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_30_days.new}</h6>
+                                <h6>{data.last_30_days && data.last_30_days.new}</h6>
                             </div>
                             <div className="col-md-6">
                                 <div>Used</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_30_days.used}</h6>
+                                <h6>{data.last_30_days && data.last_30_days.used}</h6>
                             </div>
                             <div className="col-md-6">
                                 <div>Total</div>
                             </div>
                             <div className="col-md-6 text-center">
-                                <h6>{data && data.last_30_days.total}</h6>
+                                <h6>{data.last_30_days && data.last_30_days.total}</h6>
                             </div>
                         </div>
                     </Card>
