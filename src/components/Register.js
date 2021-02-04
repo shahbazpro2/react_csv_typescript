@@ -20,6 +20,7 @@ const validateMessages = {
 };
 const Register = (props) => {
     const [preview,setPreview]=useState({newfile:'',oldfile:''})
+    const [stateFile,setStateFile]=useState({newfile:'',oldfile:''})
     const [success, setSuccess] = useState(null)
     const [error, setError] = useState(null)
     const dispatch = useDispatch()
@@ -31,8 +32,9 @@ const Register = (props) => {
             formData.append(key, value)
         }
         /* formData.append('hello','hy') */
-        formData.append('new_background_image', preview.newfile)
-        formData.append('used_background_image', preview.oldfile)
+        console.log(stateFile)
+        formData.append('new_background_image', stateFile.newfile)
+        formData.append('used_background_image', stateFile.oldfile)
         formData.append('new_enhance_all', true)
         formData.append('used_enhance_all', true)
         console.log(formData)
@@ -56,6 +58,7 @@ const Register = (props) => {
     };
     const customRequestFun = (options) => {
         const { onSuccess, file } = options;
+        setStateFile({...stateFile,newfile:file})
         let reader = new FileReader();
 
         reader.readAsDataURL(file);
@@ -67,6 +70,7 @@ const Register = (props) => {
     };
     const customRequestFun1 = (options) => {
         const { onSuccess, file } = options;
+        setStateFile({...stateFile,oldfile:file})
         let reader = new FileReader();
 
         reader.readAsDataURL(file);

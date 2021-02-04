@@ -18,6 +18,7 @@ const validateMessages = {
 const Settings = ({ active, id }) => {
     const user = useSelector(state => state.user.user)
     const [preview,setPreview]=useState({newfile:'',oldfile:''})
+    const [stateFile,setStateFile]=useState({newfile:'',oldfile:''})
     const [success, setSuccess] = useState(null)
     const [error, setError] = useState(null)
     const [form] = Form.useForm();
@@ -30,28 +31,40 @@ const Settings = ({ active, id }) => {
                     data.new_enhance_all = true
                     data.used_enhance_all = true
                     form.setFieldsValue({ user: data })
-                    setPreview({newfile:`
-                    ${data.new_background_image}`,oldfile:`
-                    ${data.used_background_image}`})
+                    setPreview({newfile:`http://3.138.211.235:8001${data.new_background_image}`,oldfile:`
+                    http://3.138.211.235:8001${data.used_background_image}`})
                 })
                 .catch(err => console.log(err))
         } else {
             axios.get(userPreferences)
-                .then(res => {
+                .then(async (res) => {
                     let data = { ...user, ...res.data }
                     console.log('d', data)
                     data.new_enhance_all = true
                     data.used_enhance_all = true
                     form.setFieldsValue({ user: data })
+                    setStateFile({newfile:await getFileFromUrl(`
+                    http://3.138.211.235:8001${data.new_background_image}`, 'newfile.jpg'),
+                    oldfile: await getFileFromUrl(`
+                    http://3.138.211.235:8001${data.new_background_image}`, 'newfile.jpg')})
+                    
+                   
                     setPreview({newfile:`
-                    ${data.new_background_image}`,oldfile:`
-                    ${data.used_background_image}`})
+                    http://3.138.211.235:8001${data.new_background_image}`,oldfile:`
+                    http://3.138.211.235:8001${data.used_background_image}`})
                 })
                 .catch(err => console.log(err))
         }
 
     }, [active, id])
-
+    async function getFileFromUrl(url, name, defaultType = 'image/jpeg'){
+        const response = await fetch(url);
+        const data = await response.blob();
+        return new File([data], name, {
+          type: response.headers.get('content-type') || defaultType,
+        });
+      }
+      
     const onFinish = (values) => {
         console.log(values.user);
         setError(null)
@@ -61,8 +74,8 @@ const Settings = ({ active, id }) => {
             formData.append(key, value)
         }
         /* formData.append('hello','hy') */
-        formData.append('new_background_image', preview.newfile)
-        formData.append('used_background_image', preview.oldfile)
+        formData.append('new_background_image', stateFile.newfile)
+        formData.append('used_background_image', stateFile.oldfile)
         console.log(formData)
         axios.put(userPreferences, formData)
             .then(res => {
@@ -79,6 +92,7 @@ const Settings = ({ active, id }) => {
     };
     const customRequestFun = (options) => {
         const { onSuccess, file } = options;
+        setStateFile({...stateFile,newfile:file})
         let reader = new FileReader();
 
   reader.readAsDataURL(file);
@@ -90,6 +104,7 @@ const Settings = ({ active, id }) => {
     };
     const customRequestFun1 = (options) => {
         const { onSuccess, file } = options;
+        setStateFile({...stateFile,oldfile:file})
         let reader = new FileReader();
 
         reader.readAsDataURL(file);
