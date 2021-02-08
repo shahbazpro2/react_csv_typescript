@@ -11,14 +11,7 @@ import { editorState } from './../../Reducers/index';
 import {saveProcessedImage} from '../../configurations/urls.js'
 import axios from 'axios'
 
-interface Props {
-    original: string,
-    removed: string,
-    idx: number,
-    saveFun: (removed: string, idx: number, obj: object) => (void),
-    closeFun: () => (void),
-    push(url: string): void
-}
+
 
 let waitingOnDownload = 0, waitingOnSave = 0;
 
@@ -54,8 +47,6 @@ export default function Editor(
     // Init brush size and zoom (tracked separately)
     const [brushSize, setBrushSize] = useState(9);
     const [zoom, setZoom] = useState(1);
-    const [color, setColor] = useState('')
-    const [readSaveImage, setReadSaveImage] = useState<any | null>(null)
     // Store whether the background is transparent - we'll need to remove the grid before downloading
     const [backgroundIsTransparent, setBackgroundIsTransparent] = useState(true);
 
@@ -83,8 +74,9 @@ export default function Editor(
                     if(typeSet==='orignal'){
                         setOrgImage(canvas.toDataURL('image/png'))
                     }
-                    else
+                    else{
                     setRemImage( canvas.toDataURL('image/png'))
+                    }
                 } catch (err) {
                     console.error(err)
                 }
@@ -97,9 +89,11 @@ export default function Editor(
     useEffect(() => {
 
         if (editor.editor.orignalImage !== '' && editor.editor.orignalImage !== null){
-            
+            /* setOrgImage(editor.editor.orignalImage)
+            setRemImage(editor.editor.removedImage) */
             imageToBase64(editor.editor.orignalImage,'orignal')
-            imageToBase64(editor.editor.removedImage,'removed')
+            imageToBase64(editor.editor.removedImage,'removed') 
+            
             }
            
         else
@@ -368,7 +362,7 @@ export default function Editor(
                             newImageCanvasContext.canvas.height,
                         );
 
-                        setBackgroundIsTransparent(false);
+                        setBackgroundIsTransparent(true);
 
                         // Request update of blur & zoomed version
                         updateZoomedContainer(true);
@@ -512,7 +506,6 @@ export default function Editor(
         }
     }, [zoom, zoomedNewImageCanvasRef, newImageCanvasRef, divSizing, backgroundIsTransparent, imgBlur]);
     const readSaveStateImage = (file: any) => {
-        setReadSaveImage(file)
         const fileReader = new FileReader();
         fileReader.onload = (event) => {
             if (event?.target?.result) {
@@ -579,7 +572,6 @@ export default function Editor(
     // Handles upload of replacement background images
     const readImage = useCallback((filePickerEvent: React.ChangeEvent<HTMLInputElement>) => {
         if (!filePickerEvent.target || !filePickerEvent.target.files || !filePickerEvent.target.files[0]) return;
-        setColor('')
         const fileReader = new FileReader();
         fileReader.onload = (event) => {
             if (event?.target?.result) {
@@ -641,7 +633,6 @@ export default function Editor(
         };
 
         // Read the image
-        setReadSaveImage(filePickerEvent.target.files[0])
         fileReader.readAsDataURL(filePickerEvent.target.files[0]);
 
         // Clear the file picker, so the same image can be uploaded if necessary and still trigger a 'change' event
@@ -650,8 +641,6 @@ export default function Editor(
     }, [newImageCanvasRef, context, canvasRef, draw, forceRedraw, updateZoomedContainer, divSizing]);
 
     const setColoredBackground = useCallback((event) => {
-        setReadSaveImage(null)
-        setColor(event.target.value)
         if (newImageCanvasRef.current && canvasRef.current) {
             const newImageCanvasContext = newImageCanvasRef.current.getContext('2d');
             if (newImageCanvasContext) {
@@ -823,8 +812,6 @@ export default function Editor(
     }, [zoom]);
 
     const clearBackgroundColor = useCallback(() => {
-        setColor('')
-        setReadSaveImage(null)
         if (newImageCanvasRef.current) {
             const newImageCanvasContext = newImageCanvasRef.current.getContext('2d');
 
@@ -1116,7 +1103,8 @@ export default function Editor(
                     </div>
                 </div>
             </div>
-            <div className='hidden-item-container'>
+
+           <div className='hidden-item-container'>
                 <canvas
                     ref={originalImageCanvasRef}
                     className='original-image'
@@ -1129,13 +1117,7 @@ export default function Editor(
                     ref={zoomedNewImageCanvasRef}
                     className='zoomed-new-image'
                 />
-                {editor.restoredImage ? <img
-                    src={editor.restoredImage}
-                    ref={removedImage}
-                    onLoad={onImageLoad}
-                    className='removed-image'
-                    alt={"removedimage"}
-                /> : <img
+                <img
                         src={remImage}
                         ref={removedImage}
                         onLoad={onImageLoad}
@@ -1143,7 +1125,7 @@ export default function Editor(
                         alt={"removedimage"}
                     />
 
-                }
+                
 
                 <img
                     src={orgImage}

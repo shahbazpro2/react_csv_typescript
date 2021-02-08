@@ -6,7 +6,9 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined, EditOutlined } from '@ant-design/icons';
 import { sendToEditor } from './../Actions/index';
 import { connect } from 'react-redux'
-
+import { Spin } from 'antd';
+import imageToBase64 from 'image-to-base64'
+import axios from 'axios'
 class TableColumn extends React.Component {
     state = {
         searchText: '',
@@ -14,7 +16,11 @@ class TableColumn extends React.Component {
         isModalVisible: false,
         visible: false,
         index: 0,
-        source: ''
+        source: '',
+        orgImage: '',
+        remImage: '',
+        loading: false
+
     };
 
     getColumnSearchProps = dataIndex => ({
@@ -89,26 +95,26 @@ class TableColumn extends React.Component {
             title: 'Orignal Image',
             dataIndex: 'original_image',
             key: 'original_image',
-            render: img =>  <Image
-            width={80}
-            src={img}
-        />
+            render: img => <Image
+                width={80}
+                src={img}
+            />
         },
         {
             title: 'Removed Image',
             dataIndex: 'editted_image',
             key: 'editted_image',
             render: img => <Image
-            width={80}
-            src={img}
-        />
+                width={80}
+                src={img}
+            />
         },
         {
             title: 'Dealer ID',
             dataIndex: 'owner',
             key: 'owner',
             ...this.getColumnSearchProps('owner'),
-            
+
             render: text => this.props.user && this.props.user.user.is_admin ? <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle(text)}>{text}</div> : text
         },
         {
@@ -165,7 +171,7 @@ class TableColumn extends React.Component {
             title: 'Certified',
             dataIndex: 'certified',
             key: 'certified',
-            render: (a) => <div > {a===true?'true':'false'} </div>
+            render: (a) => <div > {a === true ? 'true' : 'false'} </div>
         },
         {
             title: 'Vehicle Age',
@@ -189,19 +195,21 @@ class TableColumn extends React.Component {
             dataIndex: 'address',
             key: 'address',
         },
-         {
+        {
 
             title: 'Action',
             key: 'operation',
             fixed: 'right',
             width: 100,
             render: (a) => <div style={{ cursor: 'pointer' }} onClick={() => {
-                console.log('a',a)
-                this.setState({ isModalVisible: true, originalImage: a.original_image, removedImage: a.processed_image }); this.props.sendToEditor({ orignalImage: a.original_image, removedImage: a.processed_image, link: this.props.location.pathname,imgName:a.processed_image.split("/")[8],dealerId:a.owner }); this.props.history.push('/editor')
+                console.log('a', a)
+                this.setState({ isModalVisible: true, originalImage: a.original_image, removedImage: a.processed_image, loading: true });
+                this.openEditor(a)
+
             }}>
                 <EditOutlined />
             </div>
-        } ,
+        },
     ];
     handleCancel = () => {
         this.setState({ isModalVisible: true })
@@ -211,14 +219,31 @@ class TableColumn extends React.Component {
     };
     handleTriggle = () => {
         console.log('c')
-        this.setState(prevState => ({ visible: !prevState.visible }))}
+        this.setState(prevState => ({ visible: !prevState.visible }))
+    }
+    openEditor = async (a) => {
+        let image = await axios.get(`${a.original_image}`, { responseType: 'arraybuffer' });
+        let orignal = Buffer.from(image.data).toString('base64');
+        image = await axios.get(`${a.processed_image}`, { responseType: 'arraybuffer' })
+        let processed = Buffer.from(image.data).toString('base64')
+
+        this.props.sendToEditor({ orignalImage: `data:image/png;base64,${orignal}`, removedImage: `data:image/png;base64,${processed}`, link: this.props.location.pathname, imgName: a.processed_image.split("/")[8], dealerId: a.owner }); this.props.history.push('/editor')
+
+
+    }
+
     render() {
         return (
             <div>
+                {this.state.loading ? <div className="container">
+                    <div className="d-flex align-items-center justify-content-center" style={{ height: '100vh' }}>
+                        <Spin />
+                        <h3 className="ml-3">Opening Editor please wait...</h3>
+                    </div>
 
-                {/* <Editor original={this.state.originalImage} removed={this.state.removedImage} /> */}
-                <TableComp columns={this.columns} dataSource={this.props.dataSource} loading={this.props.loading} />
-       
+                </div> :
+                    <TableComp columns={this.columns} dataSource={this.props.dataSource} loading={this.props.loading} />
+                }
             </div>
         )
     }

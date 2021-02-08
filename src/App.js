@@ -30,7 +30,6 @@ import setAuthToken from './utils/setAuthToken';
 import axios from 'axios'
 import { logoutUser, setCurrentUser } from './redux/actions';
 import { allUsersData, getUserData } from './configurations/urls';
-import jwtDecode from 'jwt-decode';
 import ResetPassword from './components/ResetPassword';
 import { setAllUsers } from './redux/actions/index';
 
@@ -64,6 +63,7 @@ const App = (props) => {
         setRender(true)
     }).catch(err=>{
       dispatch(logoutUser())
+      window.location.replace('/login')
         console.log(err)
     })
 
@@ -91,7 +91,6 @@ const App = (props) => {
           <PrivateRoute exact path="/cutout" component={ Home } />
           <PrivateRoute exact path="/summary" component={ Home } />
           <PrivateRoute exact path="/editor" component={ Editor } />
-            
           <PrivateRoute exact path="/client/:id" component={ SingleUser } />
             
           <PrivateRoute exact path="/public" component={ PublicUser} />

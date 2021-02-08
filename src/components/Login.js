@@ -12,6 +12,7 @@ import { setAllUsers } from './../redux/actions/index';
 
 const Login = ({ user, history }) => {
     const [error, setError] = useState('')
+    const [loading,setLoading]=useState(false)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -21,7 +22,7 @@ const Login = ({ user, history }) => {
         }
     })
     const onFinish = (values) => {
-
+        setLoading(true)
         const userCreds = {
             email: values['email'],
             password: values['password']
@@ -40,11 +41,15 @@ const Login = ({ user, history }) => {
                             dispatch(setCurrentUser(res.data))
                             history.push('/')
                         }).catch(err => {
+                            setLoading(false)
                             console.log(err)
                         })
 
                 })
-                .catch(err => setError(true))
+                .catch(err => {
+                    setError(err.response.data.detail)
+                    setLoading(false)
+                })
         
 
     };
@@ -97,12 +102,12 @@ const Login = ({ user, history }) => {
 
 
                                 <Form.Item>
-                                    <Button type="primary" htmlType="submit">
+                                    <Button type="primary" loading={loading} htmlType="submit">
                                         Login
                                     </Button>
                                     <Link to="/forgot" className="m-3">Forgot password</Link>
                                 </Form.Item>
-                                {error && <span style={{ color: 'red' }}>Email or Password is invalid</span>}
+                                {error && <span style={{ color: 'red' }}>{error}</span>}
                             </Form>
 
                         </div>

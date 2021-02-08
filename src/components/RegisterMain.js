@@ -51,7 +51,6 @@ function RegisterMain() {
             password: values.user["password"],
             re_password: values.user["password"]
         };
-        console.log(userData)
         if (userData.email && userData.password) {
             axios.post(userCreateEndPoint, userData)
                 .then(res => {

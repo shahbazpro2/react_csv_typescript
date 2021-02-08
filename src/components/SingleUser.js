@@ -11,14 +11,17 @@ import {
     SettingOutlined
 } from '@ant-design/icons'
 import ListUsers from './ListUsers';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Settings from './Settings';
+import { logoutUser } from '../redux/actions';
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
 const SingleUser = ({ history }) => {
     const user = useSelector(state => state.user.user)
+    const dispatch=useDispatch()
     const [collapsed, setCollapsed] = useState(false);
     const [active, setActive] = useState('2');
+    const [activeTab,setActiveTab]=useState(1);
     const [email, setEmail] = useState('');
     let { id } = useParams()
     useEffect(() => {
@@ -30,18 +33,26 @@ const SingleUser = ({ history }) => {
     const changeLink = (e) => {
         setActive(e.key)
     }
+    const setTabPane=(tab)=>{
+        if(tab==='2')
+        setActiveTab(true)
+        else
+        setActiveTab(false)
+    }
     const showContent = () => {
         if (active === '1') {
             history.push('/')
         } else if (active === '2') {
-            return <Tabs defaultActiveKey="1">
+            return <Tabs  onTabClick={setTabPane} defaultActiveKey="1">
                 <TabPane
+                
                     tab={
                         <span>
                             <TableOutlined />
               CSV Data
             </span>
                     }
+                   
                     key="1"
                 >
                     <ListUsers id={id} user={user} />
@@ -55,12 +66,12 @@ const SingleUser = ({ history }) => {
                     }
                     key="2"
                 >
-                    <Settings id={id} />
+                    <Settings id={id} active={activeTab} />
                 </TabPane>
             </Tabs>
         }
         else if (active === '3') {
-            localStorage.removeItem('email');
+            dispatch(logoutUser())
             window.location.replace('/login')
         }
     }

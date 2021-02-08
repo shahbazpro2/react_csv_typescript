@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Tabs, message } from 'antd';
+import { Layout, Menu } from 'antd';
 import { useLocation, withRouter } from 'react-router-dom';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    TeamOutlined,
     UnorderedListOutlined,
     FundViewOutlined,
     UploadOutlined,
-    TabletOutlined,
-    SettingOutlined,
     ScissorOutlined
 } from '@ant-design/icons';
-import Settings from './Settings';
-import ListUsers from './ListUsers';
 import ShowingCsv from './ShowingCsv';
 import Summary from './Summary';
 import ManualCutout from './ManualCutout';
@@ -21,7 +16,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/actions';
 
 const { Header, Sider, Content } = Layout;
-const { TabPane } = Tabs;
 const Home = (props) => {
     const user = useSelector(state => state.user.user)
     const dispatch = useDispatch()

@@ -4,7 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios'
 import { userPreferences } from '../configurations/urls';
-import { getAdminUserPreferences } from './../configurations/urls';
+import { getAdminUserPreferences, adminPreferences } from './../configurations/urls';
 const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -17,102 +17,134 @@ const validateMessages = {
 };
 const Settings = ({ active, id }) => {
     const user = useSelector(state => state.user.user)
-    const [preview,setPreview]=useState({newfile:'',oldfile:''})
-    const [stateFile,setStateFile]=useState({newfile:'',oldfile:''})
+    const [preview, setPreview] = useState({ newfile: '', usedfile: '' })
+    const [stateFile, setStateFile] = useState({ newfile: '', usedfile: '' })
     const [success, setSuccess] = useState(null)
     const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(false)
     const [form] = Form.useForm();
+    console.log('out',active)
     useEffect(() => {
+        console.log('update',active)
         if (id) {
             axios.get(`${getAdminUserPreferences}${id}`)
-                .then(res => {
+                .then(async res => {
                     let data = { ...res.data, ...res.data.user_preferences }
-                    console.log('d', data)
-                    data.new_enhance_all = true
-                    data.used_enhance_all = true
-                    form.setFieldsValue({ user: data })
-                    setPreview({newfile:`http://3.138.211.235:8001${data.new_background_image}`,oldfile:`
-                    http://3.138.211.235:8001${data.used_background_image}`})
+                    setImageStates(data)
                 })
                 .catch(err => console.log(err))
         } else {
             axios.get(userPreferences)
                 .then(async (res) => {
                     let data = { ...user, ...res.data }
-                    console.log('d', data)
-                    data.new_enhance_all = true
-                    data.used_enhance_all = true
-                    form.setFieldsValue({ user: data })
-                    setStateFile({newfile:await getFileFromUrl(`
-                    http://3.138.211.235:8001${data.new_background_image}`, 'newfile.jpg'),
-                    oldfile: await getFileFromUrl(`
-                    http://3.138.211.235:8001${data.new_background_image}`, 'newfile.jpg')})
-                    
-                   
-                    setPreview({newfile:`
-                    http://3.138.211.235:8001${data.new_background_image}`,oldfile:`
-                    http://3.138.211.235:8001${data.used_background_image}`})
+                    setImageStates(data)
                 })
                 .catch(err => console.log(err))
         }
 
-    }, [active, id])
-    async function getFileFromUrl(url, name, defaultType = 'image/jpeg'){
+    }, [active])
+    const setImageStates = async (data) => {
+        form.setFieldsValue({ user: data })
+        setStateFile({
+            newfile: await getFileFromUrl(`
+        http://3.138.211.235:8001${data.new_background_image}`, 'newfile.jpg'),
+            usedfile: await getFileFromUrl(`
+        http://3.138.211.235:8001${data.used_background_image}`, 'usedfile.jpg')
+        })
+
+
+        setPreview({
+            newfile: `
+        http://3.138.211.235:8001${data.new_background_image}`, usedfile: `
+        http://3.138.211.235:8001${data.used_background_image}`
+        })
+    }
+    async function getFileFromUrl(url, name, defaultType = 'image/jpeg') {
         const response = await fetch(url);
         const data = await response.blob();
         return new File([data], name, {
-          type: response.headers.get('content-type') || defaultType,
+            type: response.headers.get('content-type') || defaultType,
         });
-      }
-      
+    }
+
     const onFinish = (values) => {
-        console.log(values.user);
         setError(null)
+        setLoading(true)
+        values.user.new_enhance_all=true
+        values.user.used_enhance_all=true
         const formData = new FormData()
         for (var key in values.user) {
             var value = values.user[key];
             formData.append(key, value)
         }
         /* formData.append('hello','hy') */
+        console.log('values',values)
         formData.append('new_background_image', stateFile.newfile)
-        formData.append('used_background_image', stateFile.oldfile)
+        formData.append('used_background_image', stateFile.usedfile)
         console.log(formData)
-        axios.put(userPreferences, formData)
+        axios.put(`${adminPreferences}${id}/`, formData)
             .then(res => {
                 setSuccess(true)
+                setLoading(false)
                 setTimeout(() => {
                     setSuccess(null)
                 }, 2000)
 
             })
             .catch(err => {
-                console.log(err)
-                setError(true)
+                console.log(err.response)
+                setLoading(false)
+                setError(err.response.data.message)
             })
     };
     const customRequestFun = (options) => {
         const { onSuccess, file } = options;
-        setStateFile({...stateFile,newfile:file})
+        setStateFile({ ...stateFile, newfile: file })
         let reader = new FileReader();
 
-  reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
 
-  reader.onload = function() {
-    setPreview({...preview,newfile:reader.result})
-  };
+        reader.onload = function () {
+            setPreview({ ...preview, newfile: reader.result })
+        };
         onSuccess(file)
     };
     const customRequestFun1 = (options) => {
         const { onSuccess, file } = options;
-        setStateFile({...stateFile,oldfile:file})
+        setStateFile({ ...stateFile, usedfile: file })
         let reader = new FileReader();
 
         reader.readAsDataURL(file);
-      
-        reader.onload = function() {
-          setPreview({...preview,oldfile:reader.result})
+
+        reader.onload = function () {
+            setPreview({ ...preview, usedfile: reader.result })
         };
         onSuccess(file)
+    };
+    const inputConfig = {
+        rules: [
+            {
+                required: true,
+                message: 'Please input this field!',
+            },
+        ],
+    };
+    const dateConfig = {
+        rules: [
+            {
+                required: true,
+                message: 'Please select time!',
+            },
+        ],
+    };
+
+    const uploadConfig = {
+        rules: [
+            {
+                required: true,
+                message: 'Please upload file!',
+            },
+        ],
     };
     return (
         <>
@@ -180,13 +212,13 @@ const Settings = ({ active, id }) => {
                                 </div>
                                 <h5 className="mt-4">Exterior Background</h5>
                                 <h6>New Vehicles</h6>
-                                <Form.Item name={['user', 'new_num_images']} label="Num images to enchance per vehicle">
+                                <Form.Item name={['user', 'new_num_images']} {...inputConfig} label="Num images to enchance per vehicle">
                                     <Input />
                                 </Form.Item>
-                                <Form.Item name={['user', 'new_only_enhance_min_num']} label="Only enhance if vehicle has a minimun of" >
+                                <Form.Item name={['user', 'new_only_enhance_min_num']} {...inputConfig} label="Only enhance if vehicle has a minimun of" >
                                     <InputNumber />
                                 </Form.Item>
-                             {/* <Form.Item name={['user', 'new_enhance_all']} valuePropName="checked" label="Enhance all existing inventory">
+                                {/* <Form.Item name={['user', 'new_enhance_all']} valuePropName="checked" label="Enhance all existing inventory">
                                     <Checkbox></Checkbox>
                                 </Form.Item> */}
                                 {/* <Form.Item name={['user', 'new_enhance_after']} label="Enhance inventory only after">
@@ -194,24 +226,24 @@ const Settings = ({ active, id }) => {
                                 </Form.Item> */}
                                 <Form.Item label="Upload background image">
                                     <div className="d-flex">
-                                    <Upload customRequest={customRequestFun}>
-                                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                                    </Upload>
-                                    <div className="ml-3">
-                                    <Image
-                                        width={80}
-                                        src={preview.newfile}
-                                    />
+                                        <Upload customRequest={customRequestFun}>
+                                            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                        </Upload>
+                                        <div className="ml-3">
+                                            <Image
+                                                width={80}
+                                                src={preview.newfile}
+                                            />
+                                        </div>
+
                                     </div>
-                                    
-                                    </div>
-                                    
+
                                 </Form.Item>
                                 <h6 className="pt-4">Used Vehicles</h6>
-                                <Form.Item name={['user', 'used_num_images']} label="Num images to enchance per vehicle">
+                                <Form.Item name={['user', 'used_num_images']} {...inputConfig} label="Num images to enchance per vehicle">
                                     <Input />
                                 </Form.Item>
-                                <Form.Item name={['user', 'used_only_enhance_min_num']} label="Only enhance if vehicle has a minimun of" >
+                                <Form.Item name={['user', 'used_only_enhance_min_num']} {...inputConfig} label="Only enhance if vehicle has a minimun of" >
                                     <InputNumber />
                                 </Form.Item>
                                 {/* <Form.Item name={['user', 'used_enhance_all']} valuePropName="checked" label="Enhance all existing inventory">
@@ -222,30 +254,36 @@ const Settings = ({ active, id }) => {
                                 </Form.Item> */}
                                 <Form.Item label="Upload background image">
                                     <div className="d-flex">
-                                    <Upload customRequest={customRequestFun1}>
-                                        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                                    </Upload>
-                                    <div className="ml-3">
-                                    <Image
-                                        width={80}
-                                        src={preview.oldfile}
-                                    />
+                                        <Upload customRequest={customRequestFun1}>
+                                            <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                        </Upload>
+                                        <div className="ml-3">
+                                            <Image
+                                                width={80}
+                                                src={preview.usedfile}
+                                            />
+                                        </div>
                                     </div>
-                                    </div>
-                                   
-                                    
+
+
                                 </Form.Item>
                                 <h6 className="pt-4">Notes/Comments:</h6>
                                 <Form.Item name={['user', 'notes']} >
                                     <Input.TextArea />
                                 </Form.Item>
                                 <Form.Item>
-                                    <Button type="primary" htmlType="submit">
+                                <div className="d-flex">
+                                    <Button type="primary" loading={loading} htmlType="submit">
                                         Update Info
                                 </Button>
-                                </Form.Item>
-                                {success ? <h6 className="text-success">Information is updated</h6> : null}
-                                {error ? <h6 className="text-danger">There is something wrong</h6> : null}
+                                {error && <p className="text-danger ml-3">
+                                    {error}
+                                    </p>}
+                                {success && <p className="text-success ml-3">
+                                    Information Successfully Updated
+                                    </p>}
+                                    </div>
+                                    </Form.Item>
                             </Form>
 
                         </div>
@@ -256,4 +294,4 @@ const Settings = ({ active, id }) => {
     )
 }
 
-export default Settings
+export default React.memo(Settings)

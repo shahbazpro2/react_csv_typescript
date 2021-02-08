@@ -22,11 +22,11 @@ const Navbar = () => {
                         {console.log('user',user)}
                         {
                         user?.email?<li className="nav-item" onClick={clearStorage}>
-                            <Link className="nav-link">Logout</Link>
+                            <Link to="/" className="nav-link">Logout</Link>
                         </li>:
                         <>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/login">Login</Link>
+                            <Link  className="nav-link" to="/login">Login</Link>
                         </li>
                         
                             <li className="nav-item">
