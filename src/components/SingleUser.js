@@ -8,12 +8,14 @@ import {
     UploadOutlined,
     RollbackOutlined,
     TableOutlined,
-    SettingOutlined
+    SettingOutlined,
+    FundOutlined
 } from '@ant-design/icons'
 import ListUsers from './ListUsers';
 import { useSelector, useDispatch } from 'react-redux';
 import Settings from './Settings';
 import { logoutUser } from '../redux/actions';
+import Summary from './Summary';
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
 const SingleUser = ({ history }) => {
@@ -67,6 +69,17 @@ const SingleUser = ({ history }) => {
                     key="2"
                 >
                     <Settings id={id} active={activeTab} />
+                </TabPane>
+                <TabPane
+                    tab={
+                        <span>
+                            <FundOutlined />
+              Summary
+            </span>
+                    }
+                    key="3"
+                >
+                    <Summary />
                 </TabPane>
             </Tabs>
         }

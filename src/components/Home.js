@@ -5,12 +5,10 @@ import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     UnorderedListOutlined,
-    FundViewOutlined,
     UploadOutlined,
     ScissorOutlined
 } from '@ant-design/icons';
 import ShowingCsv from './ShowingCsv';
-import Summary from './Summary';
 import ManualCutout from './ManualCutout';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/actions';
@@ -28,11 +26,9 @@ const Home = (props) => {
         } else */ 
         if (pathname === '/inventory-list') {
             setActive('1')
-        } else if (pathname === '/summary') {
-            setActive('2')
-        }
+        } 
         else if (pathname === '/cutout') {
-            setActive('3')
+            setActive('2')
         } else {
             props.history.push('/inventory-list')
         }
@@ -53,10 +49,8 @@ const Home = (props) => {
         if (e.key === '1') {
             props.history.push('/inventory-list')
         } else if (e.key === '2') {
-            props.history.push('/summary')
-        } else if (e.key === '3') {
             props.history.push('/cutout')
-        } else if (e.key === '4') {
+        } else if (e.key === '3') {
             dispatch(logoutUser())
             window.location.replace('/login')
         }
@@ -72,10 +66,8 @@ console.log('here')
                 
                 
             
-        } else if (active === '2') {
-            return <Summary />
         }
-        else if (active === '3') {
+        else if (active === '2') {
             return <ManualCutout />
         }
     }
@@ -94,13 +86,11 @@ console.log('here')
                             <Menu.Item key="1" icon={<UnorderedListOutlined />}>
                                 Inventory Lists
             </Menu.Item>
-                            <Menu.Item key="2" icon={<FundViewOutlined />}>
-                                View Summary
-            </Menu.Item>
-                            <Menu.Item key="3" icon={<ScissorOutlined />}>
+                            
+                            <Menu.Item key="2" icon={<ScissorOutlined />}>
                                 Manual Cutout
             </Menu.Item>
-                            <Menu.Item key="4" icon={<UploadOutlined />}>
+                            <Menu.Item key="3" icon={<UploadOutlined />}>
                                 Logout
             </Menu.Item>
                         </Menu>

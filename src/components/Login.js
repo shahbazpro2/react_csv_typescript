@@ -47,7 +47,10 @@ const Login = ({ user, history }) => {
 
                 })
                 .catch(err => {
+                    if(err.response)
                     setError(err.response.data.detail)
+                    else
+                    setError('There is something wrong')
                     setLoading(false)
                 })
         
