@@ -15,7 +15,7 @@ const Forgot = () => {
             })
             .catch(err => {
                 console.log('err',err)
-                setError(true)
+                setError(err.response.data[0])
             })
     }
     return (
@@ -45,7 +45,7 @@ const Forgot = () => {
                                     <Button type="primary" htmlType="submit">
                                         Submit
                                 </Button>
-                                {error &&  <span className="ml-3" style={{ color: 'red' }}>There is something wrong</span>}
+                                {error &&  <span className="ml-3" style={{ color: 'red' }}>{error}</span>}
                                 </Form.Item>
                                 
                             </Form>
