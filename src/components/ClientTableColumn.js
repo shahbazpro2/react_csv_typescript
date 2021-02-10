@@ -1,9 +1,9 @@
 import React from 'react'
 import TableComp from './TableComp'
-import { Input, Button, Space, Image } from 'antd'
+import { Input, Button, Space } from 'antd'
 import { withRouter } from 'react-router-dom'
 import Highlighter from 'react-highlight-words';
-import { SearchOutlined, EditOutlined } from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 
 class ClientTableColumn extends React.Component {
     state = {

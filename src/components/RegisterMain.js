@@ -21,6 +21,7 @@ function RegisterMain() {
     const [message, setMessage] = useState('')
     const [showMessage, setshowMessage] = useState(false);
     const [email, setEmail] = useState('')
+    const [loading,setLoading]=useState(false)
 
 
     const reSendEmail = () => {
@@ -37,6 +38,7 @@ function RegisterMain() {
     };
    
     const onFinish = (values) => {
+        setLoading(true)
         console.log(values.user);
         const userData = {
             email: values.user["email"],
@@ -54,16 +56,18 @@ function RegisterMain() {
         if (userData.email && userData.password) {
             axios.post(userCreateEndPoint, userData)
                 .then(res => {
-                    setEmail(userData['email'])
+                    setLoading(false)
+                   // setEmail(userData['email'])
+                   window.location.replace('/login')
                 })
                 .catch(err => {
-                    console.log(err.response.data)
-                    if(err.response.data.dealer_id){
+                    setLoading(false)
+                    if(!err.response){
+                        setMessage('There is something wrong') 
+                    }else if(err.response.data.dealer_id){
                         setMessage(err.response.data.dealer_id[0]) 
                     }else if(err.response.data.email){
                         setMessage(err.response.data.email[0]) 
-                    }else{
-                        setMessage('There is something wrong') 
                     }
                     
                     setshowMessage(true);
@@ -178,7 +182,7 @@ function RegisterMain() {
                                     </div>
                                 </div>
                                 <Form.Item>
-                                    <Button type="primary" htmlType="submit">
+                                    <Button type="primary" loading={loading} htmlType="submit">
                                         Create Account
                                     </Button>
                                     {showMessage &&

@@ -36,13 +36,16 @@ const Register = (props) => {
                 setSuccess(true)
                 setTimeout(() => {
                     setSuccess(null)
-                    props.history.push('/')
+                    window.location.replace('/public')
                 }, 2000)
                 //props.history.push('/')
             })
             .catch(err => {
                 setLoading(false)
+                if(err.response)
                 setError(err.response.data.message)
+                else
+                setError('There is something wrong')
                 console.log(err.response.data.message)}) 
     };
     const inputConfig = {

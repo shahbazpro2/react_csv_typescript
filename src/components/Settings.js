@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Form, Input, InputNumber, Button, Upload, message, Checkbox, Image } from 'antd';
+import React, { useState, useEffect } from 'react'
+import { Form, Input, InputNumber, Button, Upload, Image } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import axios from 'axios'
-import { userPreferences } from '../configurations/urls';
+import { baseURLWithoutSlash, userPreferences } from '../configurations/urls';
 import { getAdminUserPreferences, adminPreferences } from './../configurations/urls';
 const validateMessages = {
     required: '${label} is required!',
@@ -23,11 +23,11 @@ const Settings = ({ active, id }) => {
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm();
-    console.log('out',active)
+    console.log('out', active)
     useEffect(() => {
-        console.log('update',active)
+        console.log('update', active, id)
         if (id) {
-            axios.get(`${getAdminUserPreferences}${id}`)
+            axios.get(`${getAdminUserPreferences}${id}/`)
                 .then(async res => {
                     let data = { ...res.data, ...res.data.user_preferences }
                     setImageStates(data)
@@ -47,16 +47,16 @@ const Settings = ({ active, id }) => {
         form.setFieldsValue({ user: data })
         setStateFile({
             newfile: await getFileFromUrl(`
-        http://3.138.211.235:8001${data.new_background_image}`, 'newfile.jpg'),
+        ${baseURLWithoutSlash}${data.new_background_image}`, 'newfile.jpg'),
             usedfile: await getFileFromUrl(`
-        http://3.138.211.235:8001${data.used_background_image}`, 'usedfile.jpg')
+        ${baseURLWithoutSlash}${data.used_background_image}`, 'usedfile.jpg')
         })
 
 
         setPreview({
             newfile: `
-        http://3.138.211.235:8001${data.new_background_image}`, usedfile: `
-        http://3.138.211.235:8001${data.used_background_image}`
+        ${baseURLWithoutSlash}${data.new_background_image}`, usedfile: `
+        ${baseURLWithoutSlash}${data.used_background_image}`
         })
     }
     async function getFileFromUrl(url, name, defaultType = 'image/jpeg') {
@@ -70,31 +70,39 @@ const Settings = ({ active, id }) => {
     const onFinish = (values) => {
         setError(null)
         setLoading(true)
-        values.user.new_enhance_all=true
-        values.user.used_enhance_all=true
+        values.user.new_enhance_all = true
+        values.user.used_enhance_all = true
         const formData = new FormData()
         for (var key in values.user) {
             var value = values.user[key];
             formData.append(key, value)
         }
         /* formData.append('hello','hy') */
-        console.log('values',values)
+        console.log('values', values)
         formData.append('new_background_image', stateFile.newfile)
         formData.append('used_background_image', stateFile.usedfile)
         console.log(formData)
-        axios.put(`${adminPreferences}${id}/`, formData)
-            .then(res => {
-                setSuccess(true)
-                setLoading(false)
-                setTimeout(() => {
-                    setSuccess(null)
-                }, 2000)
+        let put
+        if (id) {
+            put = axios.put(`${adminPreferences}${id}/`, formData)
+        } else {
+            put = axios.put(`${userPreferences}`, formData)
+        }
 
-            })
+        put.then(res => {
+            setSuccess(true)
+            setLoading(false)
+            setTimeout(() => {
+                setSuccess(null)
+            }, 2000)
+
+        })
             .catch(err => {
-                console.log(err.response)
                 setLoading(false)
+                if(err.response)
                 setError(err.response.data.message)
+                else
+                setError('There is something wrong')
             })
     };
     const customRequestFun = (options) => {
@@ -272,18 +280,18 @@ const Settings = ({ active, id }) => {
                                     <Input.TextArea />
                                 </Form.Item>
                                 <Form.Item>
-                                <div className="d-flex">
-                                    <Button type="primary" loading={loading} htmlType="submit">
-                                        Update Info
+                                    <div className="d-flex">
+                                        <Button type="primary" loading={loading} htmlType="submit">
+                                            Update Info
                                 </Button>
-                                {error && <p className="text-danger ml-3">
-                                    {error}
-                                    </p>}
-                                {success && <p className="text-success ml-3">
-                                    Information Successfully Updated
+                                        {error && <p className="text-danger ml-3">
+                                            {error}
+                                        </p>}
+                                        {success && <p className="text-success ml-3">
+                                            Information Successfully Updated
                                     </p>}
                                     </div>
-                                    </Form.Item>
+                                </Form.Item>
                             </Form>
 
                         </div>

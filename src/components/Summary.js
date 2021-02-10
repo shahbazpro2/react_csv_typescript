@@ -8,7 +8,7 @@ const Summary = () => {
     const user=useSelector(state=>state.user.user)
     const [data,setData]=useState([])
     useEffect(()=>{
-        axios.get(`${getSummary}${user.dealer_id}`)
+        axios.get(`${getSummary}${user.dealer_id}/`)
         .then(res=>{
             console.log('data',res.data)
             setData(res.data)})

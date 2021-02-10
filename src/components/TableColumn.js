@@ -7,7 +7,6 @@ import { SearchOutlined, EditOutlined } from '@ant-design/icons';
 import { sendToEditor } from './../Actions/index';
 import { connect } from 'react-redux'
 import { Spin } from 'antd';
-import imageToBase64 from 'image-to-base64'
 import axios from 'axios'
 class TableColumn extends React.Component {
     state = {

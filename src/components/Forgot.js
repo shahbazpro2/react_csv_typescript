@@ -14,8 +14,11 @@ const Forgot = () => {
                 setSuccess(true)
             })
             .catch(err => {
-                console.log('err',err)
+                if(err.response)
                 setError(err.response.data[0])
+                else
+                setError('There is something wrong')
+               
             })
     }
     return (

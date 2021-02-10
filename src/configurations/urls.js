@@ -1,8 +1,8 @@
 // Base URLS
 
 // Localhost
-export const baseURL = "http://3.138.211.235:8001/";
-
+export const baseURL = "https://app.inventorygraphics.com/";
+export const baseURLWithoutSlash = "https://app.inventorygraphics.com";
 
 export const userCreateEndPoint = baseURL + "auth/users/"
 export const activationURL = baseURL + "auth/users/activation/"
@@ -21,3 +21,4 @@ export const singleProcessedData=baseURL+"processed/images/"
 export const allProcessedData=baseURL+"fr/admin/users/csv_processed/"
 export const saveProcessedImage=baseURL+"processed/edit/"
 export const getSummary=baseURL+"summary/"
+export const imageLink="https://app.inventorygraphics.com/media/"
