@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Layout, Menu, Tabs } from 'antd';
 import { withRouter, useParams } from 'react-router-dom'
 import {
@@ -9,7 +9,8 @@ import {
     RollbackOutlined,
     TableOutlined,
     SettingOutlined,
-    FundOutlined
+    FundOutlined,
+    HddOutlined
 } from '@ant-design/icons'
 import ListUsers from './ListUsers';
 import { useSelector, useDispatch } from 'react-redux';
@@ -60,7 +61,7 @@ const SingleUser = ({ history }) => {
                 
                     tab={
                         <span>
-                            <TableOutlined />
+                            <HddOutlined />
               Details
             </span>
                     }

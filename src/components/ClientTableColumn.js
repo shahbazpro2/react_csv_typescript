@@ -138,7 +138,6 @@ class ClientTableColumn extends React.Component {
         this.setState({ isModalVisible: true })
     };
     handleTriggle = () => {
-        console.log('c')
         this.setState(prevState => ({ visible: !prevState.visible }))}
     render() {
         return (

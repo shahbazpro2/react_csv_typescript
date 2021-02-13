@@ -22,7 +22,6 @@ const Settings = ({ active, id }) => {
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm();
-    console.log('out', active)
     useEffect(() => {
         console.log('update', active, id)
         if (id) {
@@ -77,10 +76,8 @@ const Settings = ({ active, id }) => {
             formData.append(key, value)
         }
         /* formData.append('hello','hy') */
-        console.log('values', values)
         formData.append('new_background_image', stateFile.newfile)
         formData.append('used_background_image', stateFile.usedfile)
-        console.log(formData)
         let put
         if (id) {
             put = axios.put(`${adminLink}${id}/`, formData)
