@@ -3,8 +3,7 @@ import { Form, Input, InputNumber, Button, Upload, Image } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import axios from 'axios'
-import { baseURLWithoutSlash, userPreferences } from '../configurations/urls';
-import { getAdminUserPreferences, adminPreferences } from './../configurations/urls';
+import { adminLink, baseURLWithoutSlash, userPreferences } from '../configurations/urls';
 const validateMessages = {
     required: '${label} is required!',
     types: {
@@ -27,7 +26,7 @@ const Settings = ({ active, id }) => {
     useEffect(() => {
         console.log('update', active, id)
         if (id) {
-            axios.get(`${getAdminUserPreferences}${id}/`)
+            axios.get(`${adminLink}${id}/`)
                 .then(async res => {
                     let data = { ...res.data, ...res.data.user_preferences }
                     setImageStates(data)
@@ -84,7 +83,7 @@ const Settings = ({ active, id }) => {
         console.log(formData)
         let put
         if (id) {
-            put = axios.put(`${adminPreferences}${id}/`, formData)
+            put = axios.put(`${adminLink}${id}/`, formData)
         } else {
             put = axios.put(`${userPreferences}`, formData)
         }

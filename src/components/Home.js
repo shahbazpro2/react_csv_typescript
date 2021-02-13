@@ -76,9 +76,17 @@ console.log('here')
             {active !== null ?
                 <Layout>
                     <Sider trigger={null} collapsible collapsed={collapsed}>
-                        <div className="logo">
-                            {!collapsed && <small className="text-white mb-0">{user.email}</small>}
+                    <div className="logo">
+                    {!collapsed &&<div>
+                            <div>
+                            <small className="text-white mb-0">{user && user.dealer_name}</small>
+                            </div>
+                        <div>
+                        <small className="text-white mb-0">{user && user.dealer_id}</small>
                         </div>
+                        
+                    </div> }
+                </div>
                         <Menu theme="dark" mode="inline" onClick={changeLink} defaultSelectedKeys={active}>
                            {/*  <Menu.Item key="1" icon={<TeamOutlined />}>
                                 Clients

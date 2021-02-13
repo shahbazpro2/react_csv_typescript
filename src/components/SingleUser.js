@@ -16,19 +16,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import Settings from './Settings';
 import { logoutUser } from '../redux/actions';
 import Summary from './Summary';
+import ClientDetails from './ClientDetails';
 const { TabPane } = Tabs;
 const { Header, Sider, Content } = Layout;
 const SingleUser = ({ history }) => {
     const user = useSelector(state => state.user.user)
     const dispatch=useDispatch()
     const [collapsed, setCollapsed] = useState(false);
-    const [active, setActive] = useState('2');
+    const [active, setActive] = useState('client');
     const [activeTab,setActiveTab]=useState(1);
-    const [email, setEmail] = useState('');
     let { id } = useParams()
-    useEffect(() => {
-        setEmail(user.email)
-    }, [])
     const toggle = () => {
         setCollapsed(!collapsed)
     };
@@ -36,16 +33,16 @@ const SingleUser = ({ history }) => {
         setActive(e.key)
     }
     const setTabPane=(tab)=>{
-        if(tab==='2')
+        if(tab==='client')
         setActiveTab(true)
         else
         setActiveTab(false)
     }
     const showContent = () => {
-        if (active === '1') {
+        if (active === 'back') {
             history.push('/')
-        } else if (active === '2') {
-            return <Tabs  onTabClick={setTabPane} defaultActiveKey="1">
+        } else if (active === 'client') {
+            return <Tabs  onTabClick={setTabPane} defaultActiveKey="client">
                 <TabPane
                 
                     tab={
@@ -55,20 +52,22 @@ const SingleUser = ({ history }) => {
             </span>
                     }
                    
-                    key="1"
+                    key="csv"
                 >
                     <ListUsers id={id} user={user} />
                 </TabPane>
                 <TabPane
+                
                     tab={
                         <span>
-                            <SettingOutlined />
-              Settings
+                            <TableOutlined />
+              Details
             </span>
                     }
-                    key="2"
+                   
+                    key="details"
                 >
-                    <Settings id={id} active={activeTab} />
+                    <ClientDetails id={id}/>
                 </TabPane>
                 <TabPane
                     tab={
@@ -77,13 +76,25 @@ const SingleUser = ({ history }) => {
               Summary
             </span>
                     }
-                    key="3"
+                    key="summary"
                 >
                     <Summary />
                 </TabPane>
+                <TabPane
+                    tab={
+                        <span>
+                            <SettingOutlined />
+              Settings
+            </span>
+                    }
+                    key="setting"
+                >
+                    <Settings id={id} active={activeTab} />
+                </TabPane>
+               
             </Tabs>
         }
-        else if (active === '3') {
+        else if (active === 'logout') {
             dispatch(logoutUser())
             window.location.replace('/login')
         }
@@ -91,17 +102,25 @@ const SingleUser = ({ history }) => {
     return (
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed}>
-                <div className="logo">
-                    {!collapsed && <small className="text-white mb-0">{email}</small>}
+            <div className="logo">
+                    {!collapsed &&<div>
+                            <div>
+                            <small className="text-white mb-0">{user && user.dealer_name}</small>
+                            </div>
+                        <div>
+                        <small className="text-white mb-0">{user && user.dealer_id}</small>
+                        </div>
+                        
+                    </div> }
                 </div>
-                <Menu theme="dark" mode="inline" onClick={changeLink} defaultSelectedKeys={['2']}>
-                    <Menu.Item key="1" icon={<RollbackOutlined />}>
+                <Menu theme="dark" mode="inline" onClick={changeLink} defaultSelectedKeys={['client']}>
+                    <Menu.Item key="back" icon={<RollbackOutlined />}>
                         Back
             </Menu.Item>
-                    <Menu.Item key="2" icon={<UserOutlined />}>
+                    <Menu.Item key="client" icon={<UserOutlined />}>
                         Client
             </Menu.Item>
-                    <Menu.Item key="3" icon={<UploadOutlined />}>
+                    <Menu.Item key="logout" icon={<UploadOutlined />}>
                         Logout
             </Menu.Item>
                 </Menu>

@@ -89,59 +89,46 @@ class ClientTableColumn extends React.Component {
             title: 'Dealer ID',
             dataIndex: 'dealer_id',
             key: 'DealerID',
-            ...this.getColumnSearchProps('DealerID'),
-            sorter: (a, b) => a.DealerID - b.DealerID,
-            render: text => <div style={{ cursor: 'pointer', color: 'blue' }} onClick={() => this.openSingle("8970",text)}>{text}</div> 
         },
         {
             title: 'Dealer Name',
             dataIndex: 'dealer_name',
             key: 'DealerName',
-            ...this.getColumnSearchProps('DealerName'),
-            sorter: (a, b) => a.DealerName - b.DealerName
         },
         {
             title: 'Address',
             dataIndex: 'address',
             key: 'address',
-            ...this.getColumnSearchProps('address'),
-            sorter: (a, b) => a.address - b.address
         },
         {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
-            ...this.getColumnSearchProps('email'),
         },
         {
             title: 'Phone',
             dataIndex: 'phone',
             key: 'phone',
-            ...this.getColumnSearchProps('phone'),
         },
         {
             title: 'State',
             dataIndex: 'state',
             key: 'state',
-            ...this.getColumnSearchProps('state'),
         },
         {
             title: 'City',
             dataIndex: 'city',
             key: 'city',
-            ...this.getColumnSearchProps('city'),
         },
         {
             title: 'Zip Code',
             dataIndex: 'zip_code',
             key: 'zip_code',
-            ...this.getColumnSearchProps('zip_code'),
         },
         {
             title: 'Website',
             dataIndex: 'website',
             key: 'website',
-            ...this.getColumnSearchProps('website'),
         }
     ];
     handleCancel = () => {
@@ -158,11 +145,7 @@ class ClientTableColumn extends React.Component {
             <div>
 
                 {/* <Editor original={this.state.originalImage} removed={this.state.removedImage} /> */}
-                <TableComp columns={this.columns} dataSource={this.props.dataSource} />
-               
-                   
-                
-
+                <TableComp scrollBar={false} columns={this.columns} dataSource={this.props.dataSource} />
 
             </div>
         )

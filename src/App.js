@@ -29,7 +29,7 @@ import PrivateRoute from './PrivateRoute'
 import setAuthToken from './utils/setAuthToken';
 import axios from 'axios'
 import { logoutUser, setCurrentUser } from './redux/actions';
-import { allUsersData, getUserData } from './configurations/urls';
+import { adminLink, getUserData } from './configurations/urls';
 import ResetPassword from './components/ResetPassword';
 import { setAllUsers } from './redux/actions/index';
 
@@ -50,7 +50,7 @@ const App = (props) => {
     .then(res=>{
         dispatch(setCurrentUser(res.data))
         if(res.data.email==='israrulhaq34907@gmail.com'){
-          axios.get(allUsersData)
+          axios.get(adminLink)
           .then(res=>{
             dispatch(setAllUsers(res.data))
           })

@@ -5,6 +5,7 @@ import { sendToEditor } from './../Actions/index';
 import { connect, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios'
+import { baseURL } from '../configurations/urls';
 const { Dragger } = Upload;
 
 
@@ -16,7 +17,7 @@ const ManualCutout = (props) => {
         const { onSuccess, file } = options;
         const formData=new FormData()
         formData.append('image',file)
-        axios.post('http://3.138.211.235:8000/bgremove/result/', formData)
+        axios.post(`${baseURL}bgremove/result/`, formData)
             .then(res => {
                 
                  dispatch(sendToEditor({ orignalImage: `data:image/png;base64,${res.data.original}`, removedImage: `data:image/png;base64,${res.data.image_data}`,link:props.location.pathname }))
