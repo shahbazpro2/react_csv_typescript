@@ -23,7 +23,6 @@ const Settings = ({ active, id }) => {
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm();
     useEffect(() => {
-        console.log('update', active, id)
         if (id) {
             axios.get(`${adminLink}${id}/`)
                 .then(async res => {
@@ -43,19 +42,42 @@ const Settings = ({ active, id }) => {
     }, [active])
     const setImageStates = async (data) => {
         form.setFieldsValue({ user: data })
-        setStateFile({
-            newfile: await getFileFromUrl(`
-        ${baseURLWithoutSlash}${data.new_background_image}`, 'newfile.jpg'),
-            usedfile: await getFileFromUrl(`
-        ${baseURLWithoutSlash}${data.used_background_image}`, 'usedfile.jpg')
-        })
+        if(data.new_background_image&&data.used_background_image){
+            setStateFile({
+                newfile: await getFileFromUrl(`
+            ${baseURLWithoutSlash}${data.new_background_image}`, 'newfile.jpg'),
+                usedfile: await getFileFromUrl(`
+            ${baseURLWithoutSlash}${data.used_background_image}`, 'usedfile.jpg')
+            })
+            setPreview({
+                newfile: `
+            ${baseURLWithoutSlash}${data.new_background_image}`, usedfile: `
+            ${baseURLWithoutSlash}${data.used_background_image}`
+            })
+        }else if(data.new_background_image){
+            setStateFile({
+                newfile: await getFileFromUrl(`
+            ${baseURLWithoutSlash}${data.new_background_image}`, 'newfile.jpg'),
+               
+            })
+            setPreview({
+                newfile: `
+            ${baseURLWithoutSlash}${data.new_background_image}`
+            })
+        }else if(data.used_background_image){
+            setStateFile({
+                usedfile: await getFileFromUrl(`
+            ${baseURLWithoutSlash}${data.used_background_image}`, 'usedfile.jpg')
+            })
+            setPreview({
+             usedfile: `
+            ${baseURLWithoutSlash}${data.used_background_image}`
+            })
+        }
+        
 
 
-        setPreview({
-            newfile: `
-        ${baseURLWithoutSlash}${data.new_background_image}`, usedfile: `
-        ${baseURLWithoutSlash}${data.used_background_image}`
-        })
+        
     }
     async function getFileFromUrl(url, name, defaultType = 'image/jpeg') {
         const response = await fetch(url);

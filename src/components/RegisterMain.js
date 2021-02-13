@@ -22,6 +22,7 @@ function RegisterMain() {
     const [showMessage, setshowMessage] = useState(false);
     const [email, setEmail] = useState('')
     const [loading,setLoading]=useState(false)
+    const [success, setSuccess] = useState(null)
 
 
     const reSendEmail = () => {
@@ -57,8 +58,13 @@ function RegisterMain() {
             axios.post(userCreateEndPoint, userData)
                 .then(res => {
                     setLoading(false)
+                    setSuccess(true)
+                setTimeout(() => {
+                    setSuccess(null)
+                    window.location.replace('/login')
+                }, 2000)
                    // setEmail(userData['email'])
-                   window.location.replace('/login')
+                   
                 })
                 .catch(err => {
                     setLoading(false)
@@ -187,7 +193,11 @@ function RegisterMain() {
                                     </Button>
                                     {showMessage &&
                                     <span className="ml-3" style={{ color: 'red' }}>{message}</span>
+                                    
                                 }
+                                  {success && <p className="text-success ml-3">
+                                    Information Successfully Submitted
+                                    </p>}
                                 </Form.Item>
                             </Form>
                             
